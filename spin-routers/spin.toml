@@ -1,0 +1,26 @@
+spin_version = "1"
+authors = ["Christoph Voigt <c.voigt@reply.de>"]
+description = "Some Spin examples"
+name = "spin-examples"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[[component]]
+id = "httprouter"
+source = "./api/httprouter/main.wasm"
+allowed_http_hosts = []
+[component.trigger]
+route = "/httprouter/..."
+[component.build]
+command = "tinygo build -target=wasi -gc=leaking -no-debug -o main.wasm main.go"
+workdir = "./api/httprouter"
+
+[[component]]
+id = "chirouter"
+source = "./api/chirouter/main.wasm"
+allowed_http_hosts = []
+[component.trigger]
+route = "/chi/..."
+[component.build]
+command = "tinygo build -target=wasi -gc=leaking -no-debug -o main.wasm main.go"
+workdir = "./api/chirouter"
