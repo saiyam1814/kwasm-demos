@@ -1,0 +1,15 @@
+spin_manifest_version = "1"
+authors = ["knuesting.till.ext@siemens.com <tillknuesting@gmail.com>"]
+description = "deatils service of Bookinfo application"
+name = "details"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[[component]]
+id = "details"
+source = "target/wasm32-wasi/release/details.wasm"
+allowed_http_hosts = []
+[component.trigger]
+route = "/details/"
+[component.build]
+command = "cargo build --target wasm32-wasi --release"
