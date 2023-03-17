@@ -39,3 +39,43 @@ func (p *ProductHandler) GetProduct(id int) *Product {
 	}
 	return nil
 }
+
+//tinyjson:json
+type ProductDetails struct {
+	ID        int    `json:"id"`
+	Author    string `json:"author"`
+	Year      uint16 `json:"year"`
+	Type      string `json:"type"`
+	Pages     uint16 `json:"pages"`
+	Publisher string `json:"publisher"`
+	Language  string `json:"language"`
+	ISBN10    string `json:"ISBN-10"`
+	ISBN13    string `json:"ISBN-13"`
+}
+
+//tinyjson:json
+type ProductReviews struct {
+	ID          int      `json:"id"`
+	PodName     string   `json:"podname"`
+	ClusterName string   `json:"clustername"`
+	Reviews     []Review `json:"reviews"`
+}
+
+//tinyjson:json
+type Review struct {
+	Reviewer string `json:"reviewer"`
+	Text     string `json:"text"`
+	Rating   Rating `json:"stars"`
+}
+
+//tinyjson:json
+type Rating struct {
+	Stars int    `json:"stars"`
+	Color string `json:"color"`
+}
+
+//tinyjson:json
+type ProductRatings struct {
+	ID      int            `json:"id"`
+	Ratings map[string]int `json:"ratings"`
+}

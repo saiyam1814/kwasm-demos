@@ -8,16 +8,19 @@ import (
 	"strings"
 
 	"github.com/CosmWasm/tinyjson"
+	"github.com/product_page/pkg/client"
 	"github.com/product_page/pkg/products"
 )
 
 type Handler struct {
 	ProductHandler *products.ProductHandler
+	Client         *client.Client
 }
 
 func NewHandler() *Handler {
 	return &Handler{
 		ProductHandler: products.NewProductHandler(),
+		Client:         client.NewClient(),
 	}
 }
 
@@ -44,17 +47,19 @@ func (h *Handler) ProductRoute(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	fmt.Printf("product %d requested\n", id)
+	fmt.Printf("product %d details requested\n", id)
 	w.Header().Set("Content-Type", "json")
 
 	// we would also call the details page in this handler, for now return the
 	// base product if it exists
-	product := h.ProductHandler.GetProduct(id)
-	if product == nil {
-		w.WriteHeader(http.StatusNotFound)
+	productDetails, status := h.Client.GetDetails(id)
+	if status != 200 {
+		w.WriteHeader(status)
 		return
 	}
-	b, err := tinyjson.Marshal(product)
+	// inefficient to unmarshal then marshal again, but keeps things easier ¯\_(ツ)_/¯
+	// todo: new method returning bytes not struct
+	b, err := tinyjson.Marshal(productDetails)
 	if err != nil {
 		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
