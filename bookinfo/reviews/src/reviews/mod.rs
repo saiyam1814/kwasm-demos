@@ -58,7 +58,7 @@ fn rating(r: i8) -> Option<Rating> {
         } else {
             Some(Rating {
                 stars: Some(r),
-                color: Some(star_color.clone()),
+                color: Some(star_color),
                 error: None,
             })
         }
@@ -76,8 +76,8 @@ fn reviews_response(product_id: &str, stars_review1: i8, stars_review2: i8) -> R
 
     Reviews{
         id: product_id.to_string(),
-        podname: podname,
-        clustername: clustername,
+        podname,
+        clustername,
         reviews: vec![
             Review{
                 reviewer: "Reviewer1".to_string(),

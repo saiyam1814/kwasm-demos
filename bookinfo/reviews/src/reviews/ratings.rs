@@ -11,7 +11,7 @@ pub struct RatingResponse {
 
 impl RatingResponse {
     pub fn get(&self, id: &str) -> i8 {
-        self.ratings.get(id).map(|r| *r).unwrap_or(-1)
+        self.ratings.get(id).copied().unwrap_or(-1)
     }
 }
 
@@ -41,27 +41,27 @@ fn ratings_service_url() -> String {
 }
 
 fn filter_headers<T>(h: &(&HeaderName, &T)) -> bool {
-    match h.0.as_str() {
+    matches!(
+        h.0.as_str(),
         "x-request-id"
-        | "x-ot-span-context"
-        | "x-datadog-trace-id"
-        | "x-datadog-parent-id"
-        | "x-datadog-sampling-priority"
-        | "traceparent"
-        | "tracestate"
-        | "x-cloud-trace-context"
-        | "grpc-trace-bin"
-        | "x-b3-traceid"
-        | "x-b3-spanid"
-        | "x-b3-parentspanid"
-        | "x-b3-sampled"
-        | "x-b3-flags"
-        | "sw8"
-        | "end-user"
-        | "user-agent"
-        | "cookie"
-        | "authorization"
-        | "jwt" => true,
-        _ => false,
-    }
+            | "x-ot-span-context"
+            | "x-datadog-trace-id"
+            | "x-datadog-parent-id"
+            | "x-datadog-sampling-priority"
+            | "traceparent"
+            | "tracestate"
+            | "x-cloud-trace-context"
+            | "grpc-trace-bin"
+            | "x-b3-traceid"
+            | "x-b3-spanid"
+            | "x-b3-parentspanid"
+            | "x-b3-sampled"
+            | "x-b3-flags"
+            | "sw8"
+            | "end-user"
+            | "user-agent"
+            | "cookie"
+            | "authorization"
+            | "jwt"
+    )
 }
