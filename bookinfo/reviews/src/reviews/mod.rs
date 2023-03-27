@@ -8,7 +8,6 @@ use route_recognizer::Params;
 use regex::Regex;
 
 mod ratings;
-mod headers;
 
 #[derive(Serialize)]
 struct Rating {
@@ -60,7 +59,7 @@ fn rating(r: i8) -> Option<Rating> {
     }
 }
 
-fn reviews_response(product_id: &String, stars_review1: i8, stars_review2: i8) -> Reviews {
+fn reviews_response(product_id: &str, stars_review1: i8, stars_review2: i8) -> Reviews {
     let podname = config::get("hostname").unwrap_or("".to_string());
     let clustername = config::get("cluster_name").unwrap_or("".to_string());
     
@@ -68,7 +67,7 @@ fn reviews_response(product_id: &String, stars_review1: i8, stars_review2: i8) -
     let rating2 = rating(stars_review2); 
 
     Reviews{
-        id: product_id.clone(),
+        id: product_id.to_string(),
         podname: podname,
         clustername: clustername,
         reviews: vec![
@@ -95,8 +94,8 @@ pub fn handler(req: Request, p: &Params) -> Result<Response> {
     if ratings_enabled() {
         let ratings = ratings::get_ratings(&product_id, req.headers());
         if let Ok(rating) = ratings {
-            stars_review1 = ratings::get_rating(&rating, "Reviewer1".to_string());
-            stars_review2 = ratings::get_rating(&rating, "Reviewer2".to_string());
+            stars_review1 = rating.get("Reviewer1");
+            stars_review2 = rating.get("Reviewer2");
         }
     }
 
