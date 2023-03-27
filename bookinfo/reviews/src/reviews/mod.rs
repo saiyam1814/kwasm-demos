@@ -8,6 +8,7 @@ use route_recognizer::Params;
 use regex::Regex;
 
 mod ratings;
+mod headers;
 
 #[derive(Serialize)]
 struct Rating {
@@ -39,10 +40,7 @@ fn ratings_enabled() -> bool {
     match config::get("enable_ratings") {
         Ok(s) => {
             let re = Regex::new("(?i)true").unwrap();
-            match re.find(&s) {
-                Some(_) => true,
-                None => false
-            }
+            re.find(&s).is_some()
         },
         Err(_) => false
     }
@@ -88,14 +86,14 @@ fn reviews_response(product_id: &String, stars_review1: i8, stars_review2: i8) -
     }
 }
 
-pub fn handler(_req: Request, p: &Params) -> Result<Response> {
+pub fn handler(req: Request, p: &Params) -> Result<Response> {
     let product_id = p.find("productId").unwrap().to_string();
     
     let mut stars_review1 = -1;
     let mut stars_review2 = -1;
     
     if ratings_enabled() {
-        let ratings = ratings::get_ratings(&product_id);
+        let ratings = ratings::get_ratings(&product_id, req.headers());
         if let Ok(rating) = ratings {
             stars_review1 = ratings::get_rating(&rating, "Reviewer1".to_string());
             stars_review2 = ratings::get_rating(&rating, "Reviewer2".to_string());
