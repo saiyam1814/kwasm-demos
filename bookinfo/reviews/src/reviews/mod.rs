@@ -1,11 +1,11 @@
-use anyhow::{Result, Error};
-use spin_sdk::{
-    http::{Request, Response},
-    config,
-};
-use serde::Serialize;
-use route_recognizer::Params;
+use anyhow::{Error, Result};
 use regex::Regex;
+use route_recognizer::Params;
+use serde::Serialize;
+use spin_sdk::{
+    config,
+    http::{Request, Response},
+};
 
 mod ratings;
 
@@ -16,7 +16,7 @@ struct Rating {
     #[serde(skip_serializing_if = "Option::is_none")]
     color: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    error: Option<String>
+    error: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -24,7 +24,7 @@ struct Review {
     reviewer: String,
     text: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    rating: Option<Rating>
+    rating: Option<Rating>,
 }
 
 #[derive(Serialize)]
@@ -40,8 +40,8 @@ fn ratings_enabled() -> bool {
         Ok(s) => {
             let re = Regex::new("(?i)true").unwrap();
             re.find(&s).is_some()
-        },
-        Err(_) => false
+        }
+        Err(_) => false,
     }
 }
 
@@ -50,9 +50,17 @@ fn rating(r: i8) -> Option<Rating> {
 
     if ratings_enabled() {
         if r == -1 {
-            Some(Rating { error: Some("Ratings service is currently unavailable".to_string()), stars: None, color: None })
+            Some(Rating {
+                error: Some("Ratings service is currently unavailable".to_string()),
+                stars: None,
+                color: None,
+            })
         } else {
-            Some(Rating { stars: Some(r), color: Some(star_color.clone()), error: None })
+            Some(Rating {
+                stars: Some(r),
+                color: Some(star_color.clone()),
+                error: None,
+            })
         }
     } else {
         None
@@ -62,9 +70,9 @@ fn rating(r: i8) -> Option<Rating> {
 fn reviews_response(product_id: &str, stars_review1: i8, stars_review2: i8) -> Reviews {
     let podname = config::get("hostname").unwrap_or("".to_string());
     let clustername = config::get("cluster_name").unwrap_or("".to_string());
-    
-    let rating1 = rating(stars_review1); 
-    let rating2 = rating(stars_review2); 
+
+    let rating1 = rating(stars_review1);
+    let rating2 = rating(stars_review2);
 
     Reviews{
         id: product_id.to_string(),
@@ -87,10 +95,10 @@ fn reviews_response(product_id: &str, stars_review1: i8, stars_review2: i8) -> R
 
 pub fn handler(req: Request, p: &Params) -> Result<Response> {
     let product_id = p.find("productId").unwrap().to_string();
-    
+
     let mut stars_review1 = -1;
     let mut stars_review2 = -1;
-    
+
     if ratings_enabled() {
         let ratings = ratings::get_ratings(&product_id, req.headers());
         if let Ok(rating) = ratings {
