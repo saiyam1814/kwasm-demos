@@ -1,0 +1,15 @@
+spin_manifest_version = "1"
+authors = ["tillknuesting@gmail.com"]
+description = "details Micro-Service of the Bookinfo app"
+name = "details"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[[component]]
+id = "details"
+source = "main.wasm"
+allowed_http_hosts = ["insecure:allow-all"]
+[component.trigger]
+route = "/..."
+[component.build]
+command = "tinygo build -target=wasi -gc=leaking -no-debug -o main.wasm main.go"
