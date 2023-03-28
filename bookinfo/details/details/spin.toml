@@ -9,7 +9,9 @@ version = "0.1.0"
 id = "details"
 source = "main.wasm"
 allowed_http_hosts = ["insecure:allow-all"]
+environment = { ENABLE_EXTERNAL_BOOK_SERVICE = "true" }
 [component.trigger]
 route = "/..."
 [component.build]
 command = "tinygo build -target=wasi -gc=leaking -no-debug -o main.wasm main.go"
+

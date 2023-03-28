@@ -6,6 +6,7 @@ import (
 	spinhttp "github.com/fermyon/spin/sdk/go/http"
 	"github.com/go-chi/chi/v5"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -41,7 +42,7 @@ func init() {
 				return
 			}
 
-			details, err := getBookDetails(id, nil)
+			details, err := getBookDetails(id)
 			if err != nil {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusBadRequest)
@@ -57,10 +58,11 @@ func init() {
 	})
 }
 
-func getBookDetails(id int, headers map[string]string) (BookDetails, error) {
+func getBookDetails(id int) (BookDetails, error) {
 	if os.Getenv("ENABLE_EXTERNAL_BOOK_SERVICE") == "true" {
+		log.Println("Fetching details from external service")
 		isbn := "0486424618"
-		return fetchDetailsFromExternalService(isbn, id, headers)
+		return fetchDetailsFromExternalService(isbn, id)
 	}
 
 	return BookDetails{
@@ -76,19 +78,28 @@ func getBookDetails(id int, headers map[string]string) (BookDetails, error) {
 	}, nil
 }
 
-func fetchDetailsFromExternalService(isbn string, id int, headers map[string]string) (BookDetails, error) {
+type GoogleBooksResponse struct {
+	Items []struct {
+		VolumeInfo struct {
+			Authors             []string `json:"authors"`
+			PublishedDate       string   `json:"publishedDate"`
+			PrintType           string   `json:"printType"`
+			PageCount           int      `json:"pageCount"`
+			Publisher           string   `json:"publisher"`
+			Language            string   `json:"language"`
+			IndustryIdentifiers []struct {
+				Type       string `json:"type"`
+				Identifier string `json:"identifier"`
+			} `json:"industryIdentifiers"`
+		} `json:"volumeInfo"`
+	} `json:"items"`
+}
+
+func fetchDetailsFromExternalService(isbn string, id int) (BookDetails, error) {
 	url := fmt.Sprintf("https://www.googleapis.com/books/v1/volumes?q=isbn:%s", isbn)
 
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return BookDetails{}, err
-	}
+	resp, err := spinhttp.Get(url)
 
-	for k, v := range headers {
-		req.Header.Set(k, v)
-	}
-
-	resp, err := spinhttp.Send(req)
 	if err != nil {
 		return BookDetails{}, err
 	}
@@ -99,49 +110,25 @@ func fetchDetailsFromExternalService(isbn string, id int, headers map[string]str
 		return BookDetails{}, err
 	}
 
-	var jsonResponse map[string]interface{}
+	var jsonResponse GoogleBooksResponse
 	err = json.Unmarshal(body, &jsonResponse)
 	if err != nil {
 		return BookDetails{}, err
 	}
 
-	book := jsonResponse["items"].([]interface{})[0].(map[string]interface{})["volumeInfo"].(map[string]interface{})
-
-	language := "unknown"
-	if book["language"] == "en" {
-		language = "English"
-	}
-
-	bookType := "unknown"
-	if book["printType"] == "BOOK" {
-		bookType = "paperback"
-	}
-
-	isbn10 := getISBN(book, "ISBN_10")
-	isbn13 := getISBN(book, "ISBN_13")
+	book := jsonResponse.Items[0].VolumeInfo
 
 	return BookDetails{
 		ID:        id,
-		Author:    book["authors"].([]interface{})[0].(string),
-		Year:      book["publishedDate"].(string),
-		Type:      bookType,
-		Pages:     int(book["pageCount"].(float64)),
-		Publisher: book["publisher"].(string),
-		Language:  language,
-		ISBN10:    isbn10,
-		ISBN13:    isbn13,
+		Author:    book.Authors[0],
+		Year:      book.PublishedDate,
+		Type:      book.PrintType,
+		Pages:     book.PageCount,
+		Publisher: book.Publisher,
+		Language:  book.Language,
+		ISBN10:    book.IndustryIdentifiers[1].Identifier,
+		ISBN13:    book.IndustryIdentifiers[0].Identifier,
 	}, nil
-}
-
-func getISBN(book map[string]interface{}, isbnType string) string {
-	identifiers := book["industryIdentifiers"].([]interface{})
-	for _, identifier := range identifiers {
-		idMap := identifier.(map[string]interface{})
-		if idMap["type"] == isbnType {
-			return idMap["identifier"].(string)
-		}
-	}
-	return ""
 }
 
 func main() {}
