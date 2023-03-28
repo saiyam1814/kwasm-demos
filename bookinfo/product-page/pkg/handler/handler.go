@@ -10,6 +10,7 @@ import (
 	"github.com/CosmWasm/tinyjson"
 	"github.com/product_page/pkg/client"
 	"github.com/product_page/pkg/products"
+	"github.com/product_page/pkg/template"
 )
 
 type Handler struct {
@@ -21,6 +22,17 @@ func NewHandler() *Handler {
 	return &Handler{
 		ProductHandler: products.NewProductHandler(),
 		Client:         client.NewClient(),
+	}
+}
+
+func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("all products requested")
+	w.Header().Set("Content-Type", "text/html")
+	products := h.ProductHandler.GetProducts()
+	template := template.TemplateProductPage(template.NewSummary(products[0]))
+	if _, err := w.Write([]byte(template)); err != nil {
+		fmt.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
 

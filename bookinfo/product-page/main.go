@@ -14,7 +14,7 @@ func init() {
 		handler := handler.NewHandler()
 		// we need to setup the router inside spin handler
 		router := chi.NewRouter()
-		router.Get("/", handler.UnimplementedRoute)
+		router.Get("/", handler.Index)
 		router.Get("/products", handler.ProductsRoute)
 		router.Get("/products/{id}", handler.ProductRoute)
 
