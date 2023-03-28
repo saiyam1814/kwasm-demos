@@ -4,13 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	spinhttp "github.com/fermyon/spin/sdk/go/http"
+	"github.com/go-chi/chi/v5"
 	"io"
 	"net/http"
 	"os"
 	"strconv"
-	"time"
-
-	"github.com/go-chi/chi/v5"
 )
 
 type BookDetails struct {
@@ -80,9 +78,7 @@ func getBookDetails(id int, headers map[string]string) (BookDetails, error) {
 
 func fetchDetailsFromExternalService(isbn string, id int, headers map[string]string) (BookDetails, error) {
 	url := fmt.Sprintf("https://www.googleapis.com/books/v1/volumes?q=isbn:%s", isbn)
-	client := &http.Client{
-		Timeout: time.Second * 5,
-	}
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return BookDetails{}, err
