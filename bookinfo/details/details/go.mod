@@ -1,4 +1,4 @@
-module dev-test
+module bookinfo-details
 
 go 1.19
 
