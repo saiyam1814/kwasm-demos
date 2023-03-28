@@ -92,7 +92,7 @@ func fetchDetailsFromExternalService(isbn string, id int, headers map[string]str
 		req.Header.Set(k, v)
 	}
 
-	resp, err := client.Do(req)
+	resp, err := spinhttp.Send(req)
 	if err != nil {
 		return BookDetails{}, err
 	}
