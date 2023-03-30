@@ -17,9 +17,9 @@ func init() {
 		router.Get("/", handler.Index)
 		router.Get("/productpage", handler.ProductPage)
 		router.Get("/api/v1/products", handler.Products)
-		router.Get("/api/v1//products/{id}", handler.Product)
-		router.Get("/api/v1//products/{id}/reviews", handler.Reviews)
-		router.Get("/api/v1//products/{id}/ratings", handler.Ratings)
+		router.Get("/api/v1/products/{id}", handler.Product)
+		router.Get("/api/v1/products/{id}/reviews", handler.Reviews)
+		router.Get("/api/v1/products/{id}/ratings", handler.Ratings)
 
 		// hand the request/response off to chi
 		router.ServeHTTP(res, req)
