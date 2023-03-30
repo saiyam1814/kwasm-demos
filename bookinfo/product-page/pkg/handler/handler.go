@@ -63,13 +63,29 @@ func NewHandler() *Handler {
 
 func (h *Handler) ProductPage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
+
 	products := h.ProductHandler.GetProducts()
 	if len(products) != 0 {
 		fmt.Println("no products found")
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 	product := products[0]
-	template := h.template.TemplateProductPage(product, detailsTEMP, reviewsTemp)
+
+	details, status := h.Client.GetDetails(product.ID)
+	if status != 200 {
+		// w.WriteHeader(status)
+		// return
+	}
+	reviews, status := h.Client.GetReviews(product.ID)
+	if status != 200 {
+		// w.WriteHeader(status)
+		// return
+	}
+	// TEMP REPLACE
+	details = &detailsTEMP
+	reviews = &reviewsTemp
+
+	template := h.template.TemplateProductPage(product, details, reviews)
 	if _, err := w.Write([]byte(template)); err != nil {
 		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
