@@ -48,28 +48,30 @@ var reviewsTemp = products.ProductReviews{
 }
 
 type Handler struct {
-	ProductHandler *products.ProductHandler
-	Client         *client.Client
-	template       template.TemplateHandler
+	ProductHandler  *products.ProductHandler
+	Client          *client.Client
+	template        template.TemplateHandler
+	servicesDetails *client.ServicesDetails
 }
 
 func NewHandler() *Handler {
+	servicesDetails := client.NewServicesDetails()
 	return &Handler{
-		ProductHandler: products.NewProductHandler(),
-		Client:         client.NewClient(),
-		template:       *template.NewTemplateHandler(),
+		ProductHandler:  products.NewProductHandler(),
+		Client:          client.NewClient(servicesDetails),
+		template:        *template.NewTemplateHandler(),
+		servicesDetails: servicesDetails,
 	}
 }
 
 func (h *Handler) ProductPage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-
-	products := h.ProductHandler.GetProducts()
-	if len(products) != 0 {
-		fmt.Println("no products found")
+	productID := 0 // default from istio
+	product := h.ProductHandler.GetProduct(productID)
+	if product == nil {
+		fmt.Println("product not found")
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-	product := products[0]
 
 	details, status := h.Client.GetDetails(product.ID)
 	if status != 200 {

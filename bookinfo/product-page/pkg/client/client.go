@@ -32,10 +32,10 @@ const (
 
 type Client struct {
 	client   http.Client
-	services *services
+	services *ServicesDetails
 }
 
-type services struct {
+type ServicesDetails struct {
 	productPage endpoint
 	details     endpoint
 	reviews     endpoint
@@ -47,10 +47,10 @@ type endpoint struct {
 	children []endpoint
 }
 
-func NewClient() *Client {
+func NewClient(services *ServicesDetails) *Client {
 	return &Client{
 		client:   *http.DefaultClient,
-		services: newServicesConfig(),
+		services: services,
 	}
 }
 
@@ -122,7 +122,7 @@ func getEnvVar(key string, defaultVal string) string {
 	return defaultVal
 }
 
-func newServicesConfig() *services {
+func NewServicesDetails() *ServicesDetails {
 	servicesDomain := getEnvVar(servicesDomainEnvVar, defaultServicesDomain)
 	detailsHostname := getEnvVar(detailsHostnameEnvVar, defaultDetailsHostname)
 	detailsPort := getEnvVar(detailsPortEnvVar, defaultDetailsPort)
@@ -158,7 +158,7 @@ func newServicesConfig() *services {
 		},
 	}
 
-	return &services{
+	return &ServicesDetails{
 		productPage: productPage,
 		details:     details,
 		reviews:     reviews,

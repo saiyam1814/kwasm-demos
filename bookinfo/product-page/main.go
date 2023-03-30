@@ -17,6 +17,8 @@ func init() {
 		router.Get("/product-page", handler.ProductPage)
 		router.Get("/api/v1/products", handler.ProductsRoute)
 		router.Get("/api/v1//products/{id}", handler.ProductRoute)
+		router.Get("/api/v1//products/{id}/reviews", handler.UnimplementedRoute)
+		router.Get("/api/v1//products/{id}/ratings", handler.UnimplementedRoute)
 
 		// hand the request/response off to chi
 		router.ServeHTTP(res, req)

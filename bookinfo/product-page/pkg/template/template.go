@@ -13,7 +13,7 @@ func NewTemplateHandler() *TemplateHandler {
 	return &TemplateHandler{}
 }
 
-func (t *TemplateHandler) TemplateProductPage(product products.Product, details *products.ProductDetails, reviews *products.ProductReviews) string {
+func (t *TemplateHandler) TemplateProductPage(product *products.Product, details *products.ProductDetails, reviews *products.ProductReviews) string {
 	productPage := productPageHTML
 	s := t.newSummary(product)
 	d := t.newDetails(details)
@@ -35,7 +35,7 @@ func (t *TemplateHandler) newDetails(productDetails *products.ProductDetails) st
 	return details
 }
 
-func (t *TemplateHandler) newSummary(product products.Product) string {
+func (t *TemplateHandler) newSummary(product *products.Product) string {
 	summary := summaryHTML
 	summary = strings.ReplaceAll(summary, titleReplaceTarget, product.Title)
 	summary = strings.ReplaceAll(summary, descriptionReplaceTarget, product.DescriptionHtml)
