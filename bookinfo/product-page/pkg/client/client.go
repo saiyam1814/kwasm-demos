@@ -36,15 +36,16 @@ type Client struct {
 }
 
 type ServicesDetails struct {
-	productPage endpoint
-	details     endpoint
-	reviews     endpoint
+	ProductPage Endpoint
+	Details     Endpoint
+	Reviews     Endpoint
+	Ratings     Endpoint
 }
 
-type endpoint struct {
-	name     string
-	endpoint string
-	children []endpoint
+type Endpoint struct {
+	Name     string
+	Endpoint string
+	Children []Endpoint
 }
 
 func NewClient(services *ServicesDetails) *Client {
@@ -55,7 +56,7 @@ func NewClient(services *ServicesDetails) *Client {
 }
 
 func (c *Client) GetDetails(id int) (*products.ProductDetails, int) {
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/%d", c.services.details.name, id), bytes.NewBufferString(""))
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/%d", c.services.Details.Name, id), bytes.NewBufferString(""))
 	if err != nil {
 		fmt.Println("error creating request: ", err)
 		return nil, http.StatusInternalServerError
@@ -85,7 +86,7 @@ func (c *Client) GetDetails(id int) (*products.ProductDetails, int) {
 }
 
 func (c *Client) GetReviews(id int) (*products.ProductReviews, int) {
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/%d", c.services.reviews.name, id), bytes.NewBufferString(""))
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/%d", c.services.Reviews.Name, id), bytes.NewBufferString(""))
 	if err != nil {
 		fmt.Println("error creating request: ", err)
 		return nil, http.StatusInternalServerError
@@ -131,36 +132,37 @@ func NewServicesDetails() *ServicesDetails {
 	reviewsHostname := getEnvVar(reviewsHostnameEnvVar, defaultReviewsHostname)
 	reviewsPort := getEnvVar(reviewsPortEnvVar, defaultReviewsPort)
 
-	details := endpoint{
-		name:     fmt.Sprintf("http://%s%s:%s", detailsHostname, servicesDomain, detailsPort),
-		endpoint: "details",
+	details := Endpoint{
+		Name:     fmt.Sprintf("http://%s%s:%s", detailsHostname, servicesDomain, detailsPort),
+		Endpoint: "details",
 	}
 
-	ratings := endpoint{
-		name:     fmt.Sprintf("http://%s%s:%s", ratingsHostname, servicesDomain, ratingsPort),
-		endpoint: "ratings",
+	ratings := Endpoint{
+		Name:     fmt.Sprintf("http://%s%s:%s", ratingsHostname, servicesDomain, ratingsPort),
+		Endpoint: "ratings",
 	}
 
-	reviews := endpoint{
-		name:     fmt.Sprintf("http://%s%s:%s", reviewsHostname, servicesDomain, reviewsPort),
-		endpoint: "reviews",
-		children: []endpoint{
+	reviews := Endpoint{
+		Name:     fmt.Sprintf("http://%s%s:%s", reviewsHostname, servicesDomain, reviewsPort),
+		Endpoint: "reviews",
+		Children: []Endpoint{
 			ratings,
 		},
 	}
 
-	productPage := endpoint{
-		name:     fmt.Sprintf("http://%s%s:%s", detailsHostname, servicesDomain, detailsPort),
-		endpoint: "reviews",
-		children: []endpoint{
+	productPage := Endpoint{
+		Name:     fmt.Sprintf("http://%s%s:%s", detailsHostname, servicesDomain, detailsPort),
+		Endpoint: "reviews",
+		Children: []Endpoint{
 			details,
 			reviews,
 		},
 	}
 
 	return &ServicesDetails{
-		productPage: productPage,
-		details:     details,
-		reviews:     reviews,
+		ProductPage: productPage,
+		Details:     details,
+		Reviews:     reviews,
+		Ratings:     ratings,
 	}
 }

@@ -64,6 +64,15 @@ func NewHandler() *Handler {
 	}
 }
 
+func (h *Handler) IndexPage(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	template := h.template.TemplateIndexPage(h.servicesDetails)
+	if _, err := w.Write([]byte(template)); err != nil {
+		fmt.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
 func (h *Handler) ProductPage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	productID := 0 // default from istio

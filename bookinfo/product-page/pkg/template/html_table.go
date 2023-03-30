@@ -1,0 +1,85 @@
+package template
+
+var tableHTML = `
+<table class="table table-condensed table-bordered table-hover">
+	<tr>
+		<th>
+			name
+		</th>
+		<td>
+			%s
+		</td>
+	</tr>
+	<tr>
+		<th>
+			endpoint
+		</th>
+		<td>
+			%s
+		</td>
+	</tr>
+	<tr>
+		<th>
+			children
+		</th>
+		<td>
+			<table class="table table-condensed table-bordered table-hover">
+				<tr>
+					<th>
+						name
+					</th>
+					<th>
+						endpoint
+					</th>
+					<th>
+						children
+					</th>
+				</tr>
+				<tr>
+					<td>
+						%s
+					</td>
+					<td>
+						%s
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						%s
+					</td>
+					<td>
+						%s
+					</td>
+					<td>
+						<table class="table table-condensed table-bordered table-hover">
+							<tr>
+								<th>
+									name
+								</th>
+								<th>
+									endpoint
+								</th>
+								<th>
+									children
+								</th>
+							</tr>
+							<tr>
+								<td>
+									%s
+								</td>
+								<td>
+									%s
+								</td>
+								<td>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+`

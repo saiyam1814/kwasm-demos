@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/product_page/pkg/client"
 	"github.com/product_page/pkg/products"
 )
 
@@ -11,6 +12,27 @@ type TemplateHandler struct{}
 
 func NewTemplateHandler() *TemplateHandler {
 	return &TemplateHandler{}
+}
+
+func (t *TemplateHandler) TemplateIndexPage(servicesDetails *client.ServicesDetails) string {
+	indexPage := indexHTML
+	table := t.newTable(servicesDetails)
+	indexPage = strings.ReplaceAll(indexPage, indexTableReplaceTarget, table)
+	return indexPage
+}
+
+func (t *TemplateHandler) newTable(servicesDetails *client.ServicesDetails) string {
+	return fmt.Sprintf(
+		tableHTML,
+		servicesDetails.ProductPage.Name,
+		servicesDetails.ProductPage.Endpoint,
+		servicesDetails.Details.Endpoint,
+		servicesDetails.Details.Name,
+		servicesDetails.Reviews.Endpoint,
+		servicesDetails.Reviews.Name,
+		servicesDetails.Ratings.Endpoint,
+		servicesDetails.Ratings.Name,
+	)
 }
 
 func (t *TemplateHandler) TemplateProductPage(product *products.Product, details *products.ProductDetails, reviews *products.ProductReviews) string {
