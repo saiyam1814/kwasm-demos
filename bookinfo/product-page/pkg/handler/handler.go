@@ -13,23 +13,63 @@ import (
 	"github.com/product_page/pkg/template"
 )
 
+var detailsTEMP = products.ProductDetails{
+	ID:        0,
+	Type:      "Paperback",
+	Pages:     200,
+	Publisher: "PublisherA",
+	Language:  "English",
+	ISBN10:    "1234567890",
+	ISBN13:    "123-1234567890",
+}
+
+var reviewsTemp = products.ProductReviews{
+	ID:          1,
+	PodName:     "reviews-v2-65c4dc6fdc-6bgv9",
+	ClusterName: "temp",
+	Reviews: []products.Review{
+		{
+			Reviewer: "Reviewer1",
+			Text:     "An extremely entertaining play by Shakespeare. The slapstick humour is refreshing!",
+			Rating: products.Rating{
+				Stars: 5,
+				Color: "",
+			},
+		},
+		{
+			Reviewer: "Reviewer2",
+			Text:     "Absolutely fun and entertaining. The play lacks thematic depth when compared to other plays by Shakespeare.",
+			Rating: products.Rating{
+				Stars: 4,
+				Color: "",
+			},
+		},
+	},
+}
+
 type Handler struct {
 	ProductHandler *products.ProductHandler
 	Client         *client.Client
+	template       template.TemplateHandler
 }
 
 func NewHandler() *Handler {
 	return &Handler{
 		ProductHandler: products.NewProductHandler(),
 		Client:         client.NewClient(),
+		template:       *template.NewTemplateHandler(),
 	}
 }
 
-func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("all products requested")
+func (h *Handler) ProductPage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	products := h.ProductHandler.GetProducts()
-	template := template.TemplateProductPage(template.NewSummary(products[0]))
+	if len(products) != 0 {
+		fmt.Println("no products found")
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	product := products[0]
+	template := h.template.TemplateProductPage(product, detailsTEMP, reviewsTemp)
 	if _, err := w.Write([]byte(template)); err != nil {
 		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
