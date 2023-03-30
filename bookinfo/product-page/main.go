@@ -14,9 +14,9 @@ func init() {
 		handler := handler.NewHandler()
 		// we need to setup the router inside spin handler
 		router := chi.NewRouter()
-		router.Get("/", handler.ProductPage)
-		router.Get("/products", handler.ProductsRoute)
-		router.Get("/products/{id}", handler.ProductRoute)
+		router.Get("/product-page", handler.ProductPage)
+		router.Get("/api/v1/products", handler.ProductsRoute)
+		router.Get("/api/v1//products/{id}", handler.ProductRoute)
 
 		// hand the request/response off to chi
 		router.ServeHTTP(res, req)

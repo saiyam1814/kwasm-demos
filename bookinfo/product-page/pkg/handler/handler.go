@@ -41,7 +41,7 @@ var reviewsTemp = products.ProductReviews{
 			Text:     "Absolutely fun and entertaining. The play lacks thematic depth when compared to other plays by Shakespeare.",
 			Rating: products.Rating{
 				Stars: 4,
-				Color: "",
+				Color: "green",
 			},
 		},
 	},

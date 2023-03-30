@@ -8,8 +8,9 @@ const (
 	reviewsServedByReplaceTarget = "{SERVED_BY}"
 	reviewsReviewsReplaceTarget  = "{REVIEWS}"
 	reviewsStarsReplaceTarget    = "{STARS}"
-	filledStar                   = `<span class="star">&#9733;</span>`
-	emptyStar                    = `<span class="empty-star">&#9734;</span>`
+	filledStar                   = `<span class="star" style=color:%s>&#9733;</span>`
+	emptyStar                    = `<span class="empty-star" style=color:%s>&#9734;</span>`
+	defaultStarColor             = "gold"
 )
 
 var reviewsHTML = fmt.Sprintf(
