@@ -107,12 +107,42 @@ func (c *Client) GetReviews(id int) (*products.ProductReviews, int) {
 		fmt.Println("error reading response body: ", err)
 		return nil, http.StatusInternalServerError
 	}
-	ProductReviews := &products.ProductReviews{}
-	if err := tinyjson.Unmarshal(b, ProductReviews); err != nil {
+	productReviews := &products.ProductReviews{}
+	if err := tinyjson.Unmarshal(b, productReviews); err != nil {
 		fmt.Println("unmarshal error: ", err)
 		return nil, http.StatusInternalServerError
 	}
-	return ProductReviews, http.StatusOK
+	return productReviews, http.StatusOK
+}
+
+func (c *Client) GetRatings(id int) (*products.ProductRatings, int) {
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/%d", c.services.Ratings.Name, id), bytes.NewBufferString(""))
+	if err != nil {
+		fmt.Println("error creating request: ", err)
+		return nil, http.StatusInternalServerError
+	}
+	res, err := spinhttp.Send(req)
+	if err != nil {
+		fmt.Println("spinhttp error: ", err)
+		return nil, http.StatusInternalServerError
+	}
+	if res.StatusCode != http.StatusOK {
+		return nil, res.StatusCode
+	}
+	if res.Body == nil {
+		return nil, http.StatusBadRequest
+	}
+	b, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println("error reading response body: ", err)
+		return nil, http.StatusInternalServerError
+	}
+	productRatings := &products.ProductRatings{}
+	if err := tinyjson.Unmarshal(b, productRatings); err != nil {
+		fmt.Println("unmarshal error: ", err)
+		return nil, http.StatusInternalServerError
+	}
+	return productRatings, http.StatusOK
 }
 
 func getEnvVar(key string, defaultVal string) string {

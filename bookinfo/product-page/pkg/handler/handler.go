@@ -64,7 +64,7 @@ func NewHandler() *Handler {
 	}
 }
 
-func (h *Handler) IndexPage(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	template := h.template.TemplateIndexPage(h.servicesDetails)
 	if _, err := w.Write([]byte(template)); err != nil {
@@ -103,7 +103,7 @@ func (h *Handler) ProductPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) ProductsRoute(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Products(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("all products requested")
 	w.Header().Set("Content-Type", "json")
 	products := h.ProductHandler.GetProducts()
@@ -119,7 +119,7 @@ func (h *Handler) ProductsRoute(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) ProductRoute(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Product(w http.ResponseWriter, r *http.Request) {
 	// the URL.Query method uses reflection => we cant use this
 	id, ok := h.getIdFromUrl(r.URL.Path, 2)
 	if !ok {
@@ -129,8 +129,6 @@ func (h *Handler) ProductRoute(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("product %d details requested\n", id)
 	w.Header().Set("Content-Type", "json")
 
-	// we would also call the details page in this handler, for now return the
-	// base product if it exists
 	productDetails, status := h.Client.GetDetails(id)
 	if status != 200 {
 		w.WriteHeader(status)
@@ -150,7 +148,63 @@ func (h *Handler) ProductRoute(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) UnimplementedRoute(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Reviews(w http.ResponseWriter, r *http.Request) {
+	// the URL.Query method uses reflection => we cant use this
+	id, ok := h.getIdFromUrl(r.URL.Path, 2)
+	if !ok {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	fmt.Printf("product %d review requested\n", id)
+	w.Header().Set("Content-Type", "json")
+
+	productReviews, status := h.Client.GetReviews(id)
+	if status != 200 {
+		w.WriteHeader(status)
+		return
+	}
+	// todo: new method returning bytes not struct
+	b, err := tinyjson.Marshal(productReviews)
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if _, err = w.Write(b); err != nil {
+		fmt.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
+func (h *Handler) Ratings(w http.ResponseWriter, r *http.Request) {
+	// the URL.Query method uses reflection => we cant use this
+	id, ok := h.getIdFromUrl(r.URL.Path, 2)
+	if !ok {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	fmt.Printf("product %d review requested\n", id)
+	w.Header().Set("Content-Type", "json")
+
+	productRatings, status := h.Client.GetRatings(id)
+	if status != 200 {
+		w.WriteHeader(status)
+		return
+	}
+	// todo: new method returning bytes not struct
+	b, err := tinyjson.Marshal(productRatings)
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if _, err = w.Write(b); err != nil {
+		fmt.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
+func (h *Handler) Unimplemented(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("unimplemented route hit")
 	w.Header().Set("Content-Type", "json")
 	body, err := ioutil.ReadAll(r.Body)
