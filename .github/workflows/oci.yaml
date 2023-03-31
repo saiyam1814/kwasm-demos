@@ -12,5 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build bookinfo --tag bookinfo:$(date +%s)
+      run: docker build bookinfo --tag bookinfo:latest
+    - name: Upload image
+      uses: ishworkh/docker-image-artifact-upload@v1
+      with:
+        image: "bookinfo:latest"
 
