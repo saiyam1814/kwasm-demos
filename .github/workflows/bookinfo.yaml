@@ -54,6 +54,11 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ghcr.io/liquid-reply/bookinfo
     - name: Download spin
       shell: bash
       run: curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
@@ -62,4 +67,4 @@ jobs:
       run: |
         cd bookinfo
         mv ../**/*.wasm ./
-        ../spin registry push "ghcr.io/liquid-reply/bookinfo:latest"
+        ../spin registry push "${{ steps.meta.outputs.tags }}"
