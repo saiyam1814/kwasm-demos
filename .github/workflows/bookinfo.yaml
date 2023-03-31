@@ -21,7 +21,7 @@ jobs:
     - name: Upload wasm artifact
       uses: actions/upload-artifact@v3
       with:
-        name: reviews.wasm
+        name: reviews-wasm
         path: bookinfo/reviews/target/wasm32-wasi/release/reviews.wasm
 
   build-details:
@@ -38,7 +38,7 @@ jobs:
     - name: Upload wasm artifact
       uses: actions/upload-artifact@v3
       with:
-        name: details.wasm
+        name: details-wasm
         path: bookinfo/details/details/details.wasm
 
   build-oci:
@@ -61,5 +61,5 @@ jobs:
       shell: bash
       run: |
         cd bookinfo
-        mv ../*.wasm ./
+        mv ../**/*.wasm ./
         ../spin registry push "ghcr.io/liquid-reply/bookinfo:latest"
