@@ -43,9 +43,28 @@ jobs:
         name: details-wasm
         path: bookinfo/details/details/details.wasm
 
+  build-product-page:
+    runs-on: ubuntu-latest
+    container: tinygo/tinygo-dev:latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: bookinfo/product-page
+    - name: Build
+      shell: bash
+      run: |
+        cd bookinfo/product-page
+        go mod tidy
+        GOFLAGS="-buildvcs=false" tinygo build -target=wasi -gc=leaking -no-debug -o product-page.wasm .
+    - name: Upload wasm artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: product-page-wasm
+        path: bookinfo/product-page/product-page.wasm
+
   build-oci:
     runs-on: ubuntu-latest
-    needs: [build-reviews, build-details]
+    needs: [build-reviews, build-details, build-product-page]
     steps:
     - uses: actions/checkout@v3
     - name: Download all wasm artifacts
