@@ -14,7 +14,6 @@ FROM rust-base AS reviews
 COPY reviews /reviews
 WORKDIR /reviews
 RUN cargo build --target wasm32-wasi --release
-RUN cd /; ls
 
 FROM scratch
 COPY spin.toml /spin.toml
