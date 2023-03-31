@@ -7,8 +7,12 @@ version = "0.1.0"
 
 [variables]
 services_domain = { required = true }
+details_hostname = { required = true }
 ratings_hostname = { required = true }
+reviews_hostname = { required = true }
+details_service_port = { required = true }
 ratings_service_port = { required = true }
+reviews_service_port = { required = true }
 enable_ratings = { required = true }
 star_color = { required = true }
 hostname = { required = true }
@@ -36,3 +40,18 @@ allowed_http_hosts = ["insecure:allow-all"]
 environment = { ENABLE_EXTERNAL_BOOK_SERVICE = "true" }
 [component.trigger]
 route = "/details/..."
+
+[[component]]
+id = "product-page"
+source = "product-page.wasm"
+allowed_http_hosts = [ "insecure:allow-all" ]
+[component.trigger]
+route = "/productpage/..."
+[component.config]
+services_domain = "{{ services_domain }}"
+details_hostname = "{{ details_hostname }}"
+details_service_port = "{{ details_service_port }}"
+ratings_hostname = "{{ ratings_hostname }}"
+ratings_service_port = "{{ ratings_service_port }}"
+reviews_hostname = "{{ reviews_hostname }}"
+reviews_service_port = "{{ reviews_service_port }}"
