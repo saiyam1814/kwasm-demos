@@ -1,0 +1,38 @@
+spin_manifest_version = "1"
+authors = ["Tom Gehrke <t.gehrke@reply.de>", "tillknuesting@gmail.com"]
+description = ""
+name = "bookinfo"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[variables]
+services_domain = { required = true }
+ratings_hostname = { required = true }
+ratings_service_port = { required = true }
+enable_ratings = { required = true }
+star_color = { required = true }
+hostname = { required = true }
+cluster_name = { required = true }
+
+[[component]]
+id = "reviews"
+source = "reviews.wasm"
+allowed_http_hosts = ["insecure:allow-all"]
+[component.trigger]
+route = "/reviews/..."
+[component.config]
+services_domain = "{{ services_domain }}"
+ratings_hostname = "{{ ratings_hostname }}"
+ratings_service_port = "{{ ratings_service_port }}"
+enable_ratings = "{{ enable_ratings }}"
+star_color = "{{ star_color }}"
+hostname = "{{ hostname }}"
+cluster_name = "{{ cluster_name }}"
+
+[[component]]
+id = "details"
+source = "details.wasm"
+allowed_http_hosts = ["insecure:allow-all"]
+environment = { ENABLE_EXTERNAL_BOOK_SERVICE = "true" }
+[component.trigger]
+route = "/details/..."

@@ -17,5 +17,6 @@ RUN cargo build --target wasm32-wasi --release
 RUN cd /; ls
 
 FROM scratch
+COPY spin.toml /spin.toml
 COPY --from=reviews /reviews/target/wasm32-wasi/release/reviews.wasm /reviews.wasm
 COPY --from=details /src/main.wasm /details.wasm
