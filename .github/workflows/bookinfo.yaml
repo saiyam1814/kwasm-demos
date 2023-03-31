@@ -60,6 +60,6 @@ jobs:
     - name: Build OCI image
       shell: bash
       run: |
-        pwd
-        ls
-
+        cd bookinfo
+        mv ../*.wasm ./
+        ../spin registry push "ghcr.io/liquid-reply/bookinfo:latest"
