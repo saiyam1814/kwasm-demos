@@ -18,6 +18,11 @@ jobs:
         rustup target add wasm32-wasi
         cd bookinfo/reviews
         cargo build --target wasm32-wasi --release
+    - name: Upload wasm artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: reviews.wasm
+        path: bookinfo/reviews/target/wasm32-wasi/release/reviews.wasm
 
   build-oci:
     runs-on: ubuntu-latest
