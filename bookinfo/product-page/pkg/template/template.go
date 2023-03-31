@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/product_page/pkg/client"
+	"github.com/product_page/pkg/config"
 	"github.com/product_page/pkg/products"
 )
 
@@ -14,24 +14,24 @@ func NewTemplateHandler() *TemplateHandler {
 	return &TemplateHandler{}
 }
 
-func (t *TemplateHandler) TemplateIndexPage(servicesDetails *client.ServicesDetails) string {
+func (t *TemplateHandler) TemplateIndexPage(servicesDetails *config.ServicesConfig) string {
 	indexPage := indexHTML
 	table := t.newTable(servicesDetails)
 	indexPage = strings.ReplaceAll(indexPage, indexTableReplaceTarget, table)
 	return indexPage
 }
 
-func (t *TemplateHandler) newTable(servicesDetails *client.ServicesDetails) string {
+func (t *TemplateHandler) newTable(servicesConfig *config.ServicesConfig) string {
 	return fmt.Sprintf(
 		tableHTML,
-		servicesDetails.ProductPage.Name,
-		servicesDetails.ProductPage.Endpoint,
-		servicesDetails.Details.Endpoint,
-		servicesDetails.Details.Name,
-		servicesDetails.Reviews.Endpoint,
-		servicesDetails.Reviews.Name,
-		servicesDetails.Ratings.Endpoint,
-		servicesDetails.Ratings.Name,
+		servicesConfig.ProductPage.Name,
+		servicesConfig.ProductPage.Endpoint,
+		servicesConfig.Details.Endpoint,
+		servicesConfig.Details.Name,
+		servicesConfig.Reviews.Endpoint,
+		servicesConfig.Reviews.Name,
+		servicesConfig.Ratings.Endpoint,
+		servicesConfig.Ratings.Name,
 	)
 }
 

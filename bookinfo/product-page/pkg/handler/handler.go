@@ -9,6 +9,7 @@ import (
 
 	"github.com/CosmWasm/tinyjson"
 	"github.com/product_page/pkg/client"
+	"github.com/product_page/pkg/config"
 	"github.com/product_page/pkg/products"
 	"github.com/product_page/pkg/template"
 )
@@ -48,25 +49,25 @@ var reviewsTemp = products.ProductReviews{
 }
 
 type Handler struct {
-	ProductHandler  *products.ProductHandler
-	Client          *client.Client
-	template        template.TemplateHandler
-	servicesDetails *client.ServicesDetails
+	ProductHandler *products.ProductHandler
+	Client         *client.Client
+	template       template.TemplateHandler
+	servicesConfig *config.ServicesConfig
 }
 
 func NewHandler() *Handler {
-	servicesDetails := client.NewServicesDetails()
+	servicesConfig := config.NewServicesConfig()
 	return &Handler{
-		ProductHandler:  products.NewProductHandler(),
-		Client:          client.NewClient(servicesDetails),
-		template:        *template.NewTemplateHandler(),
-		servicesDetails: servicesDetails,
+		ProductHandler: products.NewProductHandler(),
+		Client:         client.NewClient(servicesConfig),
+		template:       *template.NewTemplateHandler(),
+		servicesConfig: servicesConfig,
 	}
 }
 
 func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	template := h.template.TemplateIndexPage(h.servicesDetails)
+	template := h.template.TemplateIndexPage(h.servicesConfig)
 	if _, err := w.Write([]byte(template)); err != nil {
 		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
