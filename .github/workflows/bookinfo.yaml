@@ -49,7 +49,7 @@ jobs:
         cd bookinfo/details/details
         go mod tidy
         GOFLAGS="-buildvcs=false" ../../../spin build
-        ../../spin registry push "${{ steps.meta.outputs.tags }}"
+        ../../../spin registry push "${{ steps.meta.outputs.tags }}"
 
   build-product-page:
     runs-on: ubuntu-latest
@@ -72,4 +72,4 @@ jobs:
         cd bookinfo/product-page
         go mod tidy
         GOFLAGS="-buildvcs=false" ../../spin build
-        ../spin registry push "${{ steps.meta.outputs.tags }}"
+        ../../spin registry push "${{ steps.meta.outputs.tags }}"
