@@ -34,7 +34,7 @@ jobs:
       run: |
         cd bookinfo/details/details
         go mod tidy
-        tinygo build -target=wasi -gc=leaking -no-debug -o details.wasm .
+        GOFLAGS="-buildvcs=false" tinygo build -target=wasi -gc=leaking -no-debug -o details.wasm .
     - name: Upload wasm artifact
       uses: actions/upload-artifact@v3
       with:
