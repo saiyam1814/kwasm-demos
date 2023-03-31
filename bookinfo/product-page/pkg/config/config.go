@@ -2,7 +2,8 @@ package config
 
 import (
 	"fmt"
-	"os"
+
+	spinConfig "github.com/fermyon/spin/sdk/go/config"
 )
 
 type ServicesConfig struct {
@@ -27,23 +28,23 @@ const (
 	defaultReviewsHostname = "reviews"
 	defaultReviewsPort     = "9080"
 
-	servicesDomainEnvVar  = "SERVICES_DOMAIN"
-	detailsHostnameEnvVar = "DETAILS_HOSTNAME"
-	detailsPortEnvVar     = "DETAILS_SERVICE_PORT"
-	ratingsHostnameEnvVar = "RATINGS_HOSTNAME"
-	ratingsPortEnvVar     = "RATINGS_SERVICE_PORT"
-	reviewsHostnameEnvVar = "REVIEWS_HOSTNAME"
-	reviewsPortEnvVar     = "REVIEWS_SERVICE_PORT"
+	servicesDomainConfigKey  = "services_domain"
+	detailsHostnameConfigKey = "details_hostname"
+	detailsPortConfigKey     = "details_service_port"
+	ratingsHostnameConfigKey = "ratings_hostname"
+	ratingsPortConfigKey     = "ratings_service_port"
+	reviewsHostnameConfigKey = "ratings_service_port"
+	reviewsPortConfigKey     = "reviews_service_port"
 )
 
 func NewServicesConfig() *ServicesConfig {
-	servicesDomain := getEnvVar(servicesDomainEnvVar, defaultServicesDomain)
-	detailsHostname := getEnvVar(detailsHostnameEnvVar, defaultDetailsHostname)
-	detailsPort := getEnvVar(detailsPortEnvVar, defaultDetailsPort)
-	ratingsHostname := getEnvVar(ratingsHostnameEnvVar, defaultRatingsHostname)
-	ratingsPort := getEnvVar(ratingsPortEnvVar, defaultRatingsPort)
-	reviewsHostname := getEnvVar(reviewsHostnameEnvVar, defaultReviewsHostname)
-	reviewsPort := getEnvVar(reviewsPortEnvVar, defaultReviewsPort)
+	servicesDomain := getConfigFromKey(servicesDomainConfigKey, defaultServicesDomain)
+	detailsHostname := getConfigFromKey(detailsHostnameConfigKey, defaultDetailsHostname)
+	detailsPort := getConfigFromKey(detailsPortConfigKey, defaultDetailsPort)
+	ratingsHostname := getConfigFromKey(ratingsHostnameConfigKey, defaultRatingsHostname)
+	ratingsPort := getConfigFromKey(ratingsPortConfigKey, defaultRatingsPort)
+	reviewsHostname := getConfigFromKey(reviewsHostnameConfigKey, defaultReviewsHostname)
+	reviewsPort := getConfigFromKey(reviewsPortConfigKey, defaultReviewsPort)
 
 	details := Endpoint{
 		Name:     fmt.Sprintf("http://%s%s:%s", detailsHostname, servicesDomain, detailsPort),
@@ -80,10 +81,15 @@ func NewServicesConfig() *ServicesConfig {
 	}
 }
 
-func getEnvVar(key string, defaultVal string) string {
-	val, ok := os.LookupEnv(key)
-	if ok {
+func getConfigFromKey(key string, defaultVal string) string {
+	val, err := spinConfig.Get(key)
+	if err != nil {
+		fmt.Printf("error fetching config: %s, %s\n", key, err.Error())
 		return val
 	}
-	return defaultVal
+	if val == "" {
+		fmt.Printf("config %s not set\n", key)
+	}
+	fmt.Printf("config %s set with value %s\n", key, val)
+	return val
 }
