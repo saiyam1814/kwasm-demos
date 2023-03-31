@@ -54,3 +54,12 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Download spin
+      shell: bash
+      run: curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
+    - name: Build OCI image
+      shell: bash
+      run: |
+        pwd
+        ls
+
