@@ -45,17 +45,19 @@ func (h *Handler) ProductPage(w http.ResponseWriter, r *http.Request) {
 	productID := 0 // default from istio
 	product := h.ProductHandler.GetProduct(productID)
 	if product == nil {
-		fmt.Println("product not found")
+		fmt.Printf("products %d could not be found\n", productID)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 
 	details, status := h.Client.GetDetails(product.ID)
 	if status != 200 {
+		fmt.Printf("could not fetch product details for %d: %d\n", productID, status)
 		w.WriteHeader(status)
 		return
 	}
 	reviews, status := h.Client.GetReviews(product.ID)
 	if status != 200 {
+		fmt.Printf("could not fetch product reviews for %d: %d\n", productID, status)
 		w.WriteHeader(status)
 		return
 	}
