@@ -14,40 +14,6 @@ import (
 	"github.com/product_page/pkg/template"
 )
 
-var detailsTEMP = products.ProductDetails{
-	ID:        0,
-	Type:      "Paperback",
-	Pages:     200,
-	Publisher: "PublisherA",
-	Language:  "English",
-	ISBN10:    "1234567890",
-	ISBN13:    "123-1234567890",
-}
-
-var reviewsTemp = products.ProductReviews{
-	ID:          1,
-	PodName:     "reviews-v2-65c4dc6fdc-6bgv9",
-	ClusterName: "temp",
-	Reviews: []products.Review{
-		{
-			Reviewer: "Reviewer1",
-			Text:     "An extremely entertaining play by Shakespeare. The slapstick humour is refreshing!",
-			Rating: products.Rating{
-				Stars: 5,
-				Color: "",
-			},
-		},
-		{
-			Reviewer: "Reviewer2",
-			Text:     "Absolutely fun and entertaining. The play lacks thematic depth when compared to other plays by Shakespeare.",
-			Rating: products.Rating{
-				Stars: 4,
-				Color: "green",
-			},
-		},
-	},
-}
-
 type Handler struct {
 	ProductHandler *products.ProductHandler
 	Client         *client.Client
@@ -85,17 +51,14 @@ func (h *Handler) ProductPage(w http.ResponseWriter, r *http.Request) {
 
 	details, status := h.Client.GetDetails(product.ID)
 	if status != 200 {
-		// w.WriteHeader(status)
-		// return
+		w.WriteHeader(status)
+		return
 	}
 	reviews, status := h.Client.GetReviews(product.ID)
 	if status != 200 {
-		// w.WriteHeader(status)
-		// return
+		w.WriteHeader(status)
+		return
 	}
-	// TEMP REPLACE
-	details = &detailsTEMP
-	reviews = &reviewsTemp
 
 	template := h.template.TemplateProductPage(product, details, reviews)
 	if _, err := w.Write([]byte(template)); err != nil {
