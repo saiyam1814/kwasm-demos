@@ -1,3 +1,1 @@
 # Spin Examples
-
-Ratings microservice
