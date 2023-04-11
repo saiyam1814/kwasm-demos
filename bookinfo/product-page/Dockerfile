@@ -1,4 +1,4 @@
-FROM --platform=${BUILDPLATFORM} tinygo/tinygo-dev:latest AS build
+FROM --platform=${BUILDPLATFORM} ghcr.io/tinygo-org/tinygo-dev:latest AS build
 COPY . /product-page
 WORKDIR /product-page
 RUN go mod tidy
