@@ -1,4 +1,4 @@
-FROM tinygo/tinygo-dev:latest AS build
+FROM --platform=${BUILDPLATFORM} tinygo/tinygo-dev:latest AS build
 COPY ./details /details
 WORKDIR /details
 RUN go mod tidy

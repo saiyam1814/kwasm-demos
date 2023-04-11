@@ -1,4 +1,4 @@
-FROM rust:latest AS build
+FROM --platform=${BUILDPLATFORM} rust:latest AS build
 RUN rustup target add wasm32-wasi
 COPY . /reviews
 WORKDIR /reviews
