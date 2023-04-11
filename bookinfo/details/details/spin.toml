@@ -1,4 +1,4 @@
-spin_manifest_version = "1"
+spin_version = "1"
 authors = ["tillknuesting@gmail.com"]
 description = "details Micro-Service of the Bookinfo app"
 name = "details"

@@ -1,4 +1,4 @@
-spin_manifest_version = "1"
+spin_version = "1"
 authors = ["jamesmilligan <james@omnant.co.uk>"]
 description = ""
 name = "product-page"
