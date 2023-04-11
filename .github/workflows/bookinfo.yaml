@@ -37,7 +37,7 @@ jobs:
     - name: Build and Push
       uses: docker/build-push-action@v4
       with:
-        platforms: linux/amd64,linux/arm64
+        platforms: wasi/wasm
         push: true
         context: bookinfo/reviews
         file: bookinfo/reviews/Dockerfile
@@ -76,7 +76,7 @@ jobs:
     - name: Build and Push
       uses: docker/build-push-action@v4
       with:
-        platforms: linux/amd64,linux/arm64
+        platforms: wasi/wasm
         push: true
         context: bookinfo/details
         file: bookinfo/details/Dockerfile
