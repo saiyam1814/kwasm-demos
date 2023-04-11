@@ -16,7 +16,7 @@ cluster_name = { required = true }
 
 [[component]]
 id = "reviews"
-source = "target/wasm32-wasi/release/reviews.wasm"
+source = "/reviews.wasm"
 allowed_http_hosts = ["insecure:allow-all"]
 [component.trigger]
 route = "/..."
