@@ -72,25 +72,3 @@ jobs:
         echo "${{ secrets.GITHUB_TOKEN }}" | ../../spin registry login ghcr.io --username ${{ github.actor }} --password-stdin
         GOFLAGS="-buildvcs=false" ../../spin build
         ../../spin registry push "${{ steps.meta.outputs.tags }}"
-        
-  build-ratings:
-    runs-on: ubuntu-latest
-    container: tinygo/tinygo-dev:latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Docker meta
-      id: meta
-      uses: docker/metadata-action@v4
-      with:
-        images: ghcr.io/liquid-reply/bookinfo/ratings
-    - name: Download spin
-      shell: bash
-      run: curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
-    - name: Build
-      shell: bash
-      run: |
-        cd bookinfo/ratings
-        go mod tidy
-        echo "${{ secrets.GITHUB_TOKEN }}" | ../../spin registry login ghcr.io --username ${{ github.actor }} --password-stdin
-        GOFLAGS="-buildvcs=false" ../../spin build
-        ../../spin registry push "${{ steps.meta.outputs.tags }}"
