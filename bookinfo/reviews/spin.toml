@@ -1,4 +1,4 @@
-spin_manifest_version = "1"
+spin_version = "1"
 authors = ["Tom Gehrke <t.gehrke@reply.de>"]
 description = ""
 name = "reviews"
@@ -16,7 +16,7 @@ cluster_name = { required = true }
 
 [[component]]
 id = "reviews"
-source = "/reviews.wasm"
+source = "reviews.wasm"
 allowed_http_hosts = ["insecure:allow-all"]
 [component.trigger]
 route = "/..."
