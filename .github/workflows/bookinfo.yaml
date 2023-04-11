@@ -1,3 +1,78 @@
+name: bookinfo
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-reviews:
+    runs-on: ubuntu-latest
+    container: rust:latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ghcr.io/liquid-reply/bookinfo/reviews
+    - name: Download spin
+      shell: bash
+      run: curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
+    - name: Build
+      shell: bash
+      run: |
+        rustup target add wasm32-wasi
+        cd bookinfo/reviews
+        echo "${{ secrets.GITHUB_TOKEN }}" | ../../spin registry login ghcr.io --username ${{ github.actor }} --password-stdin
+        ../../spin build
+        ../../spin registry push "${{ steps.meta.outputs.tags }}"
+
+  build-details:
+    runs-on: ubuntu-latest
+    container: tinygo/tinygo-dev:latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ghcr.io/liquid-reply/bookinfo/details
+    - name: Download spin
+      shell: bash
+      run: curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
+    - name: Build
+      shell: bash
+      run: |
+        cd bookinfo/details/details
+        go mod tidy
+        echo "${{ secrets.GITHUB_TOKEN }}" | ../../../spin registry login ghcr.io --username ${{ github.actor }} --password-stdin
+        GOFLAGS="-buildvcs=false" ../../../spin build
+        ../../../spin registry push "${{ steps.meta.outputs.tags }}"
+
+  build-product-page:
+    runs-on: ubuntu-latest
+    container: tinygo/tinygo-dev:latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ghcr.io/liquid-reply/bookinfo/product-page
+    - name: Download spin
+      shell: bash
+      run: curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
+    - name: Build
+      shell: bash
+      run: |
+        cd bookinfo/product-page
+        go mod tidy
+        echo "${{ secrets.GITHUB_TOKEN }}" | ../../spin registry login ghcr.io --username ${{ github.actor }} --password-stdin
+        GOFLAGS="-buildvcs=false" ../../spin build
+        ../../spin registry push "${{ steps.meta.outputs.tags }}"
+        
   build-ratings:
     runs-on: ubuntu-latest
     container: tinygo/tinygo-dev:latest
