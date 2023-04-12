@@ -99,9 +99,14 @@ pub fn handler(req: Request, p: &Params) -> Result<Response> {
 
     if ratings_enabled() {
         let ratings = ratings::get_ratings(&product_id, req.headers());
-        if let Ok(rating) = ratings {
-            stars_review1 = rating.get("Reviewer1");
-            stars_review2 = rating.get("Reviewer2");
+        match ratings {
+            Ok(rating) => {
+                stars_review1 = rating.get("Reviewer1");
+                stars_review2 = rating.get("Reviewer2");
+            }
+            Err(e) => {
+                println!("Error retrieving ratings: {:?}", e);
+            }
         }
     }
 
