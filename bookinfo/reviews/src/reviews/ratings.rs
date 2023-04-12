@@ -17,6 +17,7 @@ impl RatingResponse {
 
 pub fn get_ratings(product_id: &str, headers: &HeaderMap) -> Result<RatingResponse> {
     let url = format!("{}/{}", ratings_service_url(), product_id);
+    println!("getting ratings from {url}");
     let mut req = http::Request::builder().method("GET").uri(url);
     if let Some(req_headers) = req.headers_mut() {
         for (h, v) in headers.iter().filter(filter_headers) {
