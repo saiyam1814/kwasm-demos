@@ -2,10 +2,8 @@ use anyhow::{Error, Result};
 use regex::Regex;
 use route_recognizer::Params;
 use serde::Serialize;
-use spin_sdk::{
-    config,
-    http::{Request, Response},
-};
+use spin_sdk::http::{Request, Response};
+use std::env;
 
 mod ratings;
 
@@ -36,7 +34,7 @@ struct Reviews {
 }
 
 fn ratings_enabled() -> bool {
-    match config::get("enable_ratings") {
+    match env::var("enable_ratings") {
         Ok(s) => {
             let re = Regex::new("(?i)true").unwrap();
             re.find(&s).is_some()
@@ -46,7 +44,7 @@ fn ratings_enabled() -> bool {
 }
 
 fn rating(r: i8) -> Option<Rating> {
-    let star_color = config::get("star_color").unwrap_or("black".to_string());
+    let star_color = env::var("star_color").unwrap_or("black".to_string());
 
     if ratings_enabled() {
         if r == -1 {
@@ -68,8 +66,8 @@ fn rating(r: i8) -> Option<Rating> {
 }
 
 fn reviews_response(product_id: &str, stars_review1: i8, stars_review2: i8) -> Reviews {
-    let podname = config::get("hostname").unwrap_or("".to_string());
-    let clustername = config::get("cluster_name").unwrap_or("".to_string());
+    let podname = env::var("hostname").unwrap_or("".to_string());
+    let clustername = env::var("cluster_name").unwrap_or("".to_string());
 
     let rating1 = rating(stars_review1);
     let rating2 = rating(stars_review2);

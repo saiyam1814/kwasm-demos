@@ -1,8 +1,8 @@
 use anyhow::{Error, Result};
 use http::{header::HeaderMap, HeaderName};
 use serde::Deserialize;
-use spin_sdk::config;
 use std::collections::HashMap;
+use std::env;
 
 #[derive(Deserialize)]
 pub struct RatingResponse {
@@ -31,12 +31,12 @@ pub fn get_ratings(product_id: &str, headers: &HeaderMap) -> Result<RatingRespon
 }
 
 fn ratings_service_url() -> String {
-    let services_domain = match config::get("services_domain") {
+    let services_domain = match env::var("services_domain") {
         Ok(s) => format!(".{s}"),
         Err(_) => "".to_string(),
     };
-    let ratings_hostname = config::get("ratings_hostname").unwrap_or("ratings".to_string());
-    let ratings_port = config::get("ratings_service_port").unwrap_or("9080".to_string());
+    let ratings_hostname = env::var("ratings_hostname").unwrap_or("ratings".to_string());
+    let ratings_port = env::var("ratings_service_port").unwrap_or("9080".to_string());
     format!("http://{ratings_hostname}{services_domain}:{ratings_port}/ratings")
 }
 
