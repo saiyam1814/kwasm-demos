@@ -20,6 +20,10 @@ fn error_handler(_req: Request, _p: &Params) -> Result<Response> {
 fn reviews(req: Request) -> Result<Response> {
     let mut router: Router<fn(Request, &Params) -> Result<Response>> = Router::new();
 
+    for (key, value) in std::env::vars() {
+        println!("{key}: {value}");
+    }
+
     router.add("/health", crate::health::handler);
     router.add("/reviews/:productId", crate::reviews::handler);
     router.add("/", error_handler);
