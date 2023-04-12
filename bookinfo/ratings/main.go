@@ -14,8 +14,6 @@ func init() {
 		handler := handler.NewHandler()
 
 		router := chi.NewRouter()
-		router.Get("/", handler.UnimplementedRoute)
-		router.Get("/ratings", handler.RatingsRoute)
 		router.Get("/ratings/{id}", handler.RatingRoute)
 
 		router.ServeHTTP(res, req)
