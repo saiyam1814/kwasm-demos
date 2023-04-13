@@ -6,6 +6,13 @@ details:
     pullSecret: ghcr
   port: 80
 
+ratings:
+  runtimeClassName:
+  image:
+    name: docker.io/istio/examples-bookinfo-ratings-v1
+    tag: 1.17.0
+  port: 9080
+
 reviews:
   runtimeClassName: wasmtime-spin
   image:
@@ -13,3 +20,10 @@ reviews:
     tag: main
     pullSecret: ghcr
   port: 80
+
+productpage:
+  runtimeClassName:
+  image:
+    name: docker.io/istio/examples-bookinfo-productpage-v1
+    tag: 1.17.0
+  port: 9080
