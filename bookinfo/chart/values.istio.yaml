@@ -1,0 +1,33 @@
+details:
+  runtimeClassName:
+  image:
+    name: docker.io/istio/examples-bookinfo-details-v1
+    tag: 1.17.0
+  env:
+    - name: ENABLE_EXTERNAL_BOOK_SERVICE
+      value: "true"
+  port: 9080
+
+ratings:
+  runtimeClassName:
+  image:
+    name: docker.io/istio/examples-bookinfo-ratings-v1
+    tag: 1.17.0
+  port: 9080
+
+reviews:
+  runtimeClassName:
+  image:
+    name: docker.io/istio/examples-bookinfo-reviews-v1
+    tag: 1.17.0
+  env:
+    - name: ENABLE_RATINGS
+      value: "true"
+  port: 9080
+
+productpage:
+  runtimeClassName:
+  image:
+    name: docker.io/istio/examples-bookinfo-productpage-v1
+    tag: 1.17.0
+  port: 9080
