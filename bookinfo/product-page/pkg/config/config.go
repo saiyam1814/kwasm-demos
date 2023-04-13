@@ -47,17 +47,17 @@ func NewServicesConfig() *ServicesConfig {
 	reviewsPort := getConfigFromKey(reviewsPortConfigKey, defaultReviewsPort)
 
 	details := Endpoint{
-		Name:     fmt.Sprintf("http://%s.%s:%s", detailsHostname, servicesDomain, detailsPort),
+		Name:     fmt.Sprintf("http://%s%s:%s", detailsHostname, servicesDomain, detailsPort),
 		Endpoint: "details",
 	}
 
 	ratings := Endpoint{
-		Name:     fmt.Sprintf("http://%s.%s:%s", ratingsHostname, servicesDomain, ratingsPort),
+		Name:     fmt.Sprintf("http://%s%s:%s", ratingsHostname, servicesDomain, ratingsPort),
 		Endpoint: "ratings",
 	}
 
 	reviews := Endpoint{
-		Name:     fmt.Sprintf("http://%s.%s:%s", reviewsHostname, servicesDomain, reviewsPort),
+		Name:     fmt.Sprintf("http://%s%s:%s", reviewsHostname, servicesDomain, reviewsPort),
 		Endpoint: "reviews",
 		Children: []Endpoint{
 			ratings,
@@ -65,7 +65,7 @@ func NewServicesConfig() *ServicesConfig {
 	}
 
 	productPage := Endpoint{
-		Name:     fmt.Sprintf("http://%s.%s:%s", detailsHostname, servicesDomain, detailsPort),
+		Name:     fmt.Sprintf("http://%s%s:%s", detailsHostname, servicesDomain, detailsPort),
 		Endpoint: "productpage",
 		Children: []Endpoint{
 			details,

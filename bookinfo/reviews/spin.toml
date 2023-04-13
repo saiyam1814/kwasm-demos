@@ -14,8 +14,8 @@ route = "/..."
 [component.build]
 command = "cargo build --target wasm32-wasi --release"
 [component.environment]
-SERVICES_DOMAIN = "default.svc.cluster.local"
-RATINGS_HOSTNAME = "ratings"
+SERVICES_DOMAIN = ""
+RATINGS_HOSTNAME = "10.96.10.20"
 RATINGS_SERVICE_PORT = "9080"
 ENABLE_RATINGS = "true"
 STAR_COLOR = "red"
