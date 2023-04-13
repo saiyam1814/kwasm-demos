@@ -49,6 +49,7 @@ func (c *Client) GetDetails(id int) (*products.ProductDetails, int) {
 		return nil, http.StatusInternalServerError
 	}
 	productDetails := &products.ProductDetails{}
+	fmt.Println("details body: ", string(b))
 	if err := tinyjson.Unmarshal(b, productDetails); err != nil {
 		fmt.Println("unmarshal error: ", err)
 		return nil, http.StatusInternalServerError
@@ -81,6 +82,7 @@ func (c *Client) GetReviews(id int) (*products.ProductReviews, int) {
 		return nil, http.StatusInternalServerError
 	}
 	productReviews := &products.ProductReviews{}
+	fmt.Println("reviews body: ", string(b))
 	if err := tinyjson.Unmarshal(b, productReviews); err != nil {
 		fmt.Println("unmarshal error: ", err)
 		return nil, http.StatusInternalServerError
@@ -113,6 +115,7 @@ func (c *Client) GetRatings(id int) (*products.ProductRatings, int) {
 		return nil, http.StatusInternalServerError
 	}
 	productRatings := &products.ProductRatings{}
+	fmt.Println("ratings body: ", string(b))
 	if err := tinyjson.Unmarshal(b, productRatings); err != nil {
 		fmt.Println("unmarshal error: ", err)
 		return nil, http.StatusInternalServerError
