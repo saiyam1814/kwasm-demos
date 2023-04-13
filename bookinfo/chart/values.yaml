@@ -8,18 +8,22 @@ details:
   image:
     name: liquid-reply/bookinfo/details
     tag: pr-12
+  port: 80
 
 ratings:
   image:
     name: liquid-reply/bookinfo/ratings
-    tag: main
+    tag: pr-12
+  port: 80
 
 reviews:
   image:
     name: liquid-reply/bookinfo/reviews
     tag: pr-12
+  port: 80
 
 productpage:
   image:
     name: liquid-reply/bookinfo/product-page
     tag: pr-12
+  port: 80

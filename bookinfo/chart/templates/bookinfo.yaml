@@ -37,8 +37,10 @@ metadata:
     app: details
     service: details
 spec:
+  clusterIP: 10.96.10.10
   ports:
   - port: 9080
+    targetPort: {{.Values.details.port}}
     name: http
   selector:
     app: details
@@ -76,8 +78,12 @@ spec:
       - name: details
         image: "{{.Values.image.registry}}/{{.Values.details.image.name}}:{{.Values.details.image.tag}}"
         imagePullPolicy: Always
+        {{- if .Values.details.env }}
+        env:
+        {{- .Values.details.env | toYaml | nindent 8 }}
+        {{- end }}
         ports:
-        - containerPort: 9080
+        - containerPort: {{.Values.details.port}}
         securityContext:
           runAsUser: 1000
 ---
@@ -92,8 +98,10 @@ metadata:
     app: ratings
     service: ratings
 spec:
+  clusterIP: 10.96.10.20
   ports:
   - port: 9080
+    targetPort: {{.Values.ratings.port}}
     name: http
   selector:
     app: ratings
@@ -108,7 +116,7 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ratings-v1
+  name: ratings
   labels:
     app: ratings
     version: v1
@@ -134,8 +142,12 @@ spec:
       - name: ratings
         image: "{{.Values.image.registry}}/{{.Values.ratings.image.name}}:{{.Values.ratings.image.tag}}"
         imagePullPolicy: Always
+        {{- if .Values.ratings.env }}
+        env:
+        {{- .Values.ratings.env | toYaml | nindent 8 }}
+        {{- end }}
         ports:
-        - containerPort: 9080
+        - containerPort: {{.Values.ratings.port}}
         securityContext:
           runAsUser: 1000
 ---
@@ -150,8 +162,10 @@ metadata:
     app: reviews
     service: reviews
 spec:
+  clusterIP: 10.96.10.30
   ports:
   - port: 9080
+    targetPort: {{.Values.reviews.port}}
     name: http
   selector:
     app: reviews
@@ -192,8 +206,11 @@ spec:
         env:
         - name: LOG_DIR
           value: "/tmp/logs"
+        {{- if .Values.reviews.env }}
+        {{- .Values.reviews.env | toYaml | nindent 8 }}
+        {{- end }}
         ports:
-        - containerPort: 9080
+        - containerPort: {{.Values.reviews.port}}
         volumeMounts:
         - name: tmp
           mountPath: /tmp
@@ -218,8 +235,10 @@ metadata:
     app: productpage
     service: productpage
 spec:
+  clusterIP: 10.96.10.40
   ports:
   - port: 9080
+    targetPort: {{.Values.productpage.port}}
     name: http
   selector:
     app: productpage
@@ -234,7 +253,7 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: productpage-v1
+  name: productpage
   labels:
     app: productpage
     version: v1
@@ -264,8 +283,12 @@ spec:
       - name: productpage
         image: "{{.Values.image.registry}}/{{.Values.productpage.image.name}}:{{.Values.productpage.image.tag}}"
         imagePullPolicy: Always
+        {{- if .Values.productpage.env }}
+        env:
+        {{- .Values.productpage.env | toYaml | nindent 8 }}
+        {{- end }}
         ports:
-        - containerPort: 9080
+        - containerPort: {{.Values.productpage.port}}
         volumeMounts:
         - name: tmp
           mountPath: /tmp
