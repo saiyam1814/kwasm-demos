@@ -69,8 +69,8 @@ spec:
         app: details
     spec:
       serviceAccountName: bookinfo-details
-      {{- if .Values.runtimeClassName }}
-      runtimeClassName: {{.Values.runtimeClassName}}
+      {{- if .Values.details.runtimeClassName }}
+      runtimeClassName: {{.Values.details.runtimeClassName}}
       {{- end }}
       imagePullSecrets:
       - name: {{.Values.image.pullSecret}}
@@ -133,8 +133,8 @@ spec:
         version: v1
     spec:
       serviceAccountName: bookinfo-ratings
-      {{- if .Values.runtimeClassName }}
-      runtimeClassName: {{.Values.runtimeClassName}}
+      {{- if .Values.details.runtimeClassName }}
+      runtimeClassName: {{.Values.details.runtimeClassName}}
       {{- end }}
       imagePullSecrets:
       - name: {{.Values.image.pullSecret}}
@@ -194,8 +194,8 @@ spec:
         app: reviews
     spec:
       serviceAccountName: bookinfo-reviews
-      {{- if .Values.runtimeClassName }}
-      runtimeClassName: {{.Values.runtimeClassName}}
+      {{- if .Values.reviews.runtimeClassName }}
+      runtimeClassName: {{.Values.reviews.runtimeClassName}}
       {{- end }}
       imagePullSecrets:
       - name: {{.Values.image.pullSecret}}
@@ -274,8 +274,8 @@ spec:
         version: v1
     spec:
       serviceAccountName: bookinfo-productpage
-      {{- if .Values.runtimeClassName }}
-      runtimeClassName: {{.Values.runtimeClassName}}
+      {{- if .Values.productpage.runtimeClassName }}
+      runtimeClassName: {{.Values.productpage.runtimeClassName}}
       {{- end }}
       imagePullSecrets:
       - name: {{.Values.image.pullSecret}}
