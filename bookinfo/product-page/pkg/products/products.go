@@ -52,7 +52,7 @@ type ProductReviews struct {
 type Review struct {
 	Reviewer string `json:"reviewer"`
 	Text     string `json:"text"`
-	Rating   Rating `json:"stars"`
+	Rating   Rating `json:"rating"`
 }
 
 //tinyjson:json

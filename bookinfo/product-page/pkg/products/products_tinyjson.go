@@ -38,7 +38,7 @@ func tinyjson797f9fe8DecodeGithubComProductPagePkgProducts(in *jlexer.Lexer, out
 			out.Reviewer = string(in.String())
 		case "text":
 			out.Text = string(in.String())
-		case "stars":
+		case "rating":
 			(out.Rating).UnmarshalTinyJSON(in)
 		default:
 			in.SkipRecursive()
@@ -65,7 +65,7 @@ func tinyjson797f9fe8EncodeGithubComProductPagePkgProducts(out *jwriter.Writer, 
 		out.String(string(in.Text))
 	}
 	{
-		const prefix string = ",\"stars\":"
+		const prefix string = ",\"rating\":"
 		out.RawString(prefix)
 		(in.Rating).MarshalTinyJSON(out)
 	}
