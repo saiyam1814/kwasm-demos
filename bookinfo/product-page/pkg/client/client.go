@@ -25,7 +25,7 @@ func NewClient(services *config.ServicesConfig) *Client {
 }
 
 func (c *Client) GetDetails(id int) (*products.ProductDetails, int) {
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/details/%d", c.services.Details.Name, id), bytes.NewBufferString(""))
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/details/%d", c.services.Details.Name, id), bytes.NewBufferString(""))
 	if err != nil {
 		fmt.Println("error creating request: ", err)
 		return nil, http.StatusInternalServerError
@@ -55,7 +55,7 @@ func (c *Client) GetDetails(id int) (*products.ProductDetails, int) {
 }
 
 func (c *Client) GetReviews(id int) (*products.ProductReviews, int) {
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/reviews/%d", c.services.Reviews.Name, id), bytes.NewBufferString(""))
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/reviews/%d", c.services.Reviews.Name, id), bytes.NewBufferString(""))
 	if err != nil {
 		fmt.Println("error creating request: ", err)
 		return nil, http.StatusInternalServerError
@@ -85,7 +85,7 @@ func (c *Client) GetReviews(id int) (*products.ProductReviews, int) {
 }
 
 func (c *Client) GetRatings(id int) (*products.ProductRatings, int) {
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/ratings/%d", c.services.Ratings.Name, id), bytes.NewBufferString(""))
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/ratings/%d", c.services.Ratings.Name, id), bytes.NewBufferString(""))
 	if err != nil {
 		fmt.Println("error creating request: ", err)
 		return nil, http.StatusInternalServerError
