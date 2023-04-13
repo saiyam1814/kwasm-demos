@@ -69,15 +69,19 @@ func (t *TemplateHandler) newReviews(reviews *products.ProductReviews) string {
 	revs := ""
 	for _, rev := range reviews.Reviews {
 		color := defaultStarColor
-		if rev.Rating.Color != "" {
-			color = rev.Rating.Color
+		if rev.Rating.Color != nil {
+			color = *rev.Rating.Color
 		}
 		temp := reviewHTML
 		temp = strings.ReplaceAll(temp, reviewsTextReplaceTarget, rev.Text)
 		temp = strings.ReplaceAll(temp, reviewsReviewerReplaceTarget, rev.Reviewer)
 		stars := ""
+		numStars := 0
+		if rev.Rating.Stars != nil {
+			numStars = *rev.Rating.Stars
+		}
 		for i := 1; i <= 5; i++ {
-			if i <= rev.Rating.Stars {
+			if i <= numStars {
 				stars = stars + fmt.Sprintf(filledStar, color)
 			} else {
 				stars = stars + fmt.Sprintf(emptyStar, color)

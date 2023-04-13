@@ -42,7 +42,7 @@ type ProductDetails struct {
 
 //tinyjson:json
 type ProductReviews struct {
-	ID          int      `json:"id"`
+	ID          string   `json:"id"`
 	PodName     string   `json:"podname"`
 	ClusterName string   `json:"clustername"`
 	Reviews     []Review `json:"reviews"`
@@ -57,8 +57,9 @@ type Review struct {
 
 //tinyjson:json
 type Rating struct {
-	Stars int    `json:"stars"`
-	Color string `json:"color"`
+	Stars *int    `json:"stars"`
+	Color *string `json:"color"`
+	Error *string `json:"error"`
 }
 
 //tinyjson:json
