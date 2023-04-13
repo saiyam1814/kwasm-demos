@@ -72,11 +72,13 @@ spec:
       {{- if .Values.details.runtimeClassName }}
       runtimeClassName: {{.Values.details.runtimeClassName}}
       {{- end }}
+      {{- if .Values.details.image.pullSecret }}
       imagePullSecrets:
-      - name: {{.Values.image.pullSecret}}
+      - name: {{.Values.details.image.pullSecret}}
+      {{- end }}
       containers:
       - name: details
-        image: "{{.Values.image.registry}}/{{.Values.details.image.name}}:{{.Values.details.image.tag}}"
+        image: "{{.Values.details.image.name}}:{{.Values.details.image.tag}}"
         imagePullPolicy: Always
         {{- if .Values.details.env }}
         env:
@@ -133,14 +135,16 @@ spec:
         version: v1
     spec:
       serviceAccountName: bookinfo-ratings
-      {{- if .Values.details.runtimeClassName }}
-      runtimeClassName: {{.Values.details.runtimeClassName}}
+      {{- if .Values.ratings.runtimeClassName }}
+      runtimeClassName: {{.Values.ratings.runtimeClassName}}
       {{- end }}
+      {{- if .Values.ratings.image.pullSecret }}
       imagePullSecrets:
-      - name: {{.Values.image.pullSecret}}
+      - name: {{.Values.ratings.image.pullSecret}}
+      {{- end }}
       containers:
       - name: ratings
-        image: "{{.Values.image.registry}}/{{.Values.ratings.image.name}}:{{.Values.ratings.image.tag}}"
+        image: "{{.Values.ratings.image.name}}:{{.Values.ratings.image.tag}}"
         imagePullPolicy: Always
         {{- if .Values.ratings.env }}
         env:
@@ -197,11 +201,13 @@ spec:
       {{- if .Values.reviews.runtimeClassName }}
       runtimeClassName: {{.Values.reviews.runtimeClassName}}
       {{- end }}
+      {{- if .Values.reviews.image.pullSecret }}
       imagePullSecrets:
-      - name: {{.Values.image.pullSecret}}
+      - name: {{.Values.reviews.image.pullSecret}}
+      {{- end }}
       containers:
       - name: reviews
-        image: "{{.Values.image.registry}}/{{.Values.reviews.image.name}}:{{.Values.reviews.image.tag}}"
+        image: "{{.Values.reviews.image.name}}:{{.Values.reviews.image.tag}}"
         imagePullPolicy: Always
         env:
         - name: LOG_DIR
@@ -277,11 +283,13 @@ spec:
       {{- if .Values.productpage.runtimeClassName }}
       runtimeClassName: {{.Values.productpage.runtimeClassName}}
       {{- end }}
+      {{- if .Values.productpage.image.pullSecret }}
       imagePullSecrets:
-      - name: {{.Values.image.pullSecret}}
+      - name: {{.Values.productpage.image.pullSecret}}
+      {{- end }}
       containers:
       - name: productpage
-        image: "{{.Values.image.registry}}/{{.Values.productpage.image.name}}:{{.Values.productpage.image.tag}}"
+        image: "{{.Values.productpage.image.name}}:{{.Values.productpage.image.tag}}"
         imagePullPolicy: Always
         {{- if .Values.productpage.env }}
         env:

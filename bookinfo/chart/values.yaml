@@ -1,31 +1,27 @@
-image:
-  registry: ghcr.io
-  pullSecret: ghcr
-
 details:
-  runtimeClassName: wasmtime-spin
+  runtimeClassName:
   image:
-    name: liquid-reply/bookinfo/details
-    tag: pr-12
-  port: 80
+    name: docker.io/istio/examples-bookinfo-details-v1
+    tag: 1.17.0
+  port: 9080
 
 ratings:
-  runtimeClassName: wasmtime-spin
+  runtimeClassName:
   image:
-    name: liquid-reply/bookinfo/ratings
-    tag: pr-12
-  port: 80
+    name: docker.io/istio/examples-bookinfo-ratings-v1
+    tag: 1.17.0
+  port: 9080
 
 reviews:
-  runtimeClassName: wasmtime-spin
+  runtimeClassName:
   image:
-    name: liquid-reply/bookinfo/reviews
-    tag: pr-12
-  port: 80
+    name: docker.io/istio/examples-bookinfo-reviews-v1
+    tag: 1.17.0
+  port: 9080
 
 productpage:
-  runtimeClassName: wasmtime-spin
+  runtimeClassName:
   image:
-    name: liquid-reply/bookinfo/product-page
-    tag: pr-12
-  port: 80
+    name: docker.io/istio/examples-bookinfo-productpage-v1
+    tag: 1.17.0
+  port: 9080
