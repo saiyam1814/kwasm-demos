@@ -3,19 +3,21 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	spinhttp "github.com/fermyon/spin/sdk/go/http"
-	"github.com/go-chi/chi/v5"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+	"time"
+
+	spinhttp "github.com/fermyon/spin/sdk/go/http"
+	"github.com/go-chi/chi/v5"
 )
 
 type BookDetails struct {
 	ID        int    `json:"id"`
 	Author    string `json:"author"`
-	Year      string `json:"year"`
+	Year      int    `json:"year"`
 	Type      string `json:"type"`
 	Pages     int    `json:"pages"`
 	Publisher string `json:"publisher"`
@@ -68,7 +70,7 @@ func getBookDetails(id int) (BookDetails, error) {
 	return BookDetails{
 		ID:        id,
 		Author:    "William Shakespeare",
-		Year:      "1595",
+		Year:      1595,
 		Type:      "paperback",
 		Pages:     200,
 		Publisher: "PublisherA",
@@ -118,10 +120,15 @@ func fetchDetailsFromExternalService(isbn string, id int) (BookDetails, error) {
 
 	book := jsonResponse.Items[0].VolumeInfo
 
+	published, err := time.Parse("2006-01-02", book.PublishedDate)
+	if err != nil {
+		return BookDetails{}, err
+	}
+
 	return BookDetails{
 		ID:        id,
 		Author:    book.Authors[0],
-		Year:      book.PublishedDate,
+		Year:      published.Year(),
 		Type:      book.PrintType,
 		Pages:     book.PageCount,
 		Publisher: book.Publisher,

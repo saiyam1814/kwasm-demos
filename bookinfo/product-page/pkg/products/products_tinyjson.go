@@ -38,7 +38,7 @@ func tinyjson797f9fe8DecodeGithubComProductPagePkgProducts(in *jlexer.Lexer, out
 			out.Reviewer = string(in.String())
 		case "text":
 			out.Text = string(in.String())
-		case "stars":
+		case "rating":
 			(out.Rating).UnmarshalTinyJSON(in)
 		default:
 			in.SkipRecursive()
@@ -65,7 +65,7 @@ func tinyjson797f9fe8EncodeGithubComProductPagePkgProducts(out *jwriter.Writer, 
 		out.String(string(in.Text))
 	}
 	{
-		const prefix string = ",\"stars\":"
+		const prefix string = ",\"rating\":"
 		out.RawString(prefix)
 		(in.Rating).MarshalTinyJSON(out)
 	}
@@ -115,9 +115,35 @@ func tinyjson797f9fe8DecodeGithubComProductPagePkgProducts1(in *jlexer.Lexer, ou
 		}
 		switch key {
 		case "stars":
-			out.Stars = int(in.Int())
+			if in.IsNull() {
+				in.Skip()
+				out.Stars = nil
+			} else {
+				if out.Stars == nil {
+					out.Stars = new(int)
+				}
+				*out.Stars = int(in.Int())
+			}
 		case "color":
-			out.Color = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.Color = nil
+			} else {
+				if out.Color == nil {
+					out.Color = new(string)
+				}
+				*out.Color = string(in.String())
+			}
+		case "error":
+			if in.IsNull() {
+				in.Skip()
+				out.Error = nil
+			} else {
+				if out.Error == nil {
+					out.Error = new(string)
+				}
+				*out.Error = string(in.String())
+			}
 		default:
 			in.SkipRecursive()
 		}
@@ -135,12 +161,29 @@ func tinyjson797f9fe8EncodeGithubComProductPagePkgProducts1(out *jwriter.Writer,
 	{
 		const prefix string = ",\"stars\":"
 		out.RawString(prefix[1:])
-		out.Int(int(in.Stars))
+		if in.Stars == nil {
+			out.RawString("null")
+		} else {
+			out.Int(int(*in.Stars))
+		}
 	}
 	{
 		const prefix string = ",\"color\":"
 		out.RawString(prefix)
-		out.String(string(in.Color))
+		if in.Color == nil {
+			out.RawString("null")
+		} else {
+			out.String(string(*in.Color))
+		}
+	}
+	{
+		const prefix string = ",\"error\":"
+		out.RawString(prefix)
+		if in.Error == nil {
+			out.RawString("null")
+		} else {
+			out.String(string(*in.Error))
+		}
 	}
 	out.RawByte('}')
 }
@@ -254,7 +297,7 @@ func tinyjson797f9fe8DecodeGithubComProductPagePkgProducts3(in *jlexer.Lexer, ou
 		}
 		switch key {
 		case "id":
-			out.ID = int(in.Int())
+			out.ID = string(in.String())
 		case "podname":
 			out.PodName = string(in.String())
 		case "clustername":
@@ -299,7 +342,7 @@ func tinyjson797f9fe8EncodeGithubComProductPagePkgProducts3(out *jwriter.Writer,
 	{
 		const prefix string = ",\"id\":"
 		out.RawString(prefix[1:])
-		out.Int(int(in.ID))
+		out.String(string(in.ID))
 	}
 	{
 		const prefix string = ",\"podname\":"

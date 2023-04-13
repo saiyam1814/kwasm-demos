@@ -33,7 +33,7 @@ const (
 	detailsPortConfigKey     = "details_service_port"
 	ratingsHostnameConfigKey = "ratings_hostname"
 	ratingsPortConfigKey     = "ratings_service_port"
-	reviewsHostnameConfigKey = "ratings_service_port"
+	reviewsHostnameConfigKey = "reviews_hostname"
 	reviewsPortConfigKey     = "reviews_service_port"
 )
 

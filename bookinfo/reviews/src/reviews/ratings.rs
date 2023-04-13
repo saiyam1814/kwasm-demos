@@ -1,8 +1,8 @@
 use anyhow::{Error, Result};
 use http::{header::HeaderMap, HeaderName};
 use serde::Deserialize;
-use spin_sdk::config;
 use std::collections::HashMap;
+use std::env;
 
 #[derive(Deserialize)]
 pub struct RatingResponse {
@@ -17,6 +17,7 @@ impl RatingResponse {
 
 pub fn get_ratings(product_id: &str, headers: &HeaderMap) -> Result<RatingResponse> {
     let url = format!("{}/{}", ratings_service_url(), product_id);
+    println!("getting ratings from {url}");
     let mut req = http::Request::builder().method("GET").uri(url);
     if let Some(req_headers) = req.headers_mut() {
         for (h, v) in headers.iter().filter(filter_headers) {
@@ -31,12 +32,12 @@ pub fn get_ratings(product_id: &str, headers: &HeaderMap) -> Result<RatingRespon
 }
 
 fn ratings_service_url() -> String {
-    let services_domain = match config::get("services_domain") {
+    let services_domain = match env::var("SERVICES_DOMAIN") {
         Ok(s) => format!(".{s}"),
         Err(_) => "".to_string(),
     };
-    let ratings_hostname = config::get("ratings_hostname").unwrap_or("ratings".to_string());
-    let ratings_port = config::get("ratings_service_port").unwrap_or("9080".to_string());
+    let ratings_hostname = env::var("RATINGS_HOSTNAME").unwrap_or("ratings".to_string());
+    let ratings_port = env::var("RATINGS_SERVICE_PORT").unwrap_or("9080".to_string());
     format!("http://{ratings_hostname}{services_domain}:{ratings_port}/ratings")
 }
 

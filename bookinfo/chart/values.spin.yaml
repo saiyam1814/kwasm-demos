@@ -1,0 +1,31 @@
+details:
+  runtimeClassName: wasmtime-spin
+  image:
+    name: ghcr.io/liquid-reply/bookinfo/details
+    tag: main
+    pullSecret: ghcr
+  port: 80
+
+ratings:
+  runtimeClassName: wasmtime-spin
+  image:
+    name: ghcr.io/liquid-reply/bookinfo/ratings
+    tag: main
+    pullSecret: ghcr
+  port: 80
+
+reviews:
+  runtimeClassName: wasmtime-spin
+  image:
+    name: ghcr.io/liquid-reply/bookinfo/reviews
+    tag: main
+    pullSecret: ghcr
+  port: 80
+
+productpage:
+  runtimeClassName: wasmtime-spin
+  image:
+    name: ghcr.io/liquid-reply/bookinfo/product-page
+    tag: main
+    pullSecret: ghcr
+  port: 80

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -18,22 +17,6 @@ type Handler struct {
 func NewHandler() *Handler {
 	return &Handler{
 		RatingHandler: ratings.NewRatingHandler(),
-	}
-}
-
-func (h *Handler) RatingsRoute(w http.ResponseWriter, r *http.Request) {
-	log.Println("/ratings: All ratings requested")
-	w.Header().Set("Content-Type", "json")
-	ratings := h.RatingHandler.GetRatings()
-	b, err := json.Marshal(ratings)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	if _, err = w.Write(b); err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
 
@@ -59,20 +42,6 @@ func (h *Handler) RatingRoute(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-}
-
-func (h *Handler) UnimplementedRoute(w http.ResponseWriter, r *http.Request) {
-	log.Println("/: Hit default unimplemented route")
-	w.Header().Set("Content-Type", "json")
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	log.Println(string(body))
-
-	log.Println(r)
 }
 
 func (h *Handler) getIdFromUrl(url string, index int) (int, bool) {

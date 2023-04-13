@@ -1,18 +1,9 @@
-spin_manifest_version = "1"
+spin_version = "1"
 authors = ["Tom Gehrke <t.gehrke@reply.de>"]
 description = ""
 name = "reviews"
 trigger = { type = "http", base = "/" }
 version = "0.1.0"
-
-[variables]
-services_domain = { required = true }
-ratings_hostname = { required = true }
-ratings_service_port = { required = true }
-enable_ratings = { required = true }
-star_color = { required = true }
-hostname = { required = true }
-cluster_name = { required = true }
 
 [[component]]
 id = "reviews"
@@ -22,11 +13,11 @@ allowed_http_hosts = ["insecure:allow-all"]
 route = "/..."
 [component.build]
 command = "cargo build --target wasm32-wasi --release"
-[component.config]
-services_domain = "{{ services_domain }}"
-ratings_hostname = "{{ ratings_hostname }}"
-ratings_service_port = "{{ ratings_service_port }}"
-enable_ratings = "{{ enable_ratings }}"
-star_color = "{{ star_color }}"
-hostname = "{{ hostname }}"
-cluster_name = "{{ cluster_name }}"
+[component.environment]
+SERVICES_DOMAIN = ""
+RATINGS_HOSTNAME = "10.96.10.20"
+RATINGS_SERVICE_PORT = "9080"
+ENABLE_RATINGS = "true"
+STAR_COLOR = "red"
+HOSTNAME = "spin"
+CLUSTER_NAME = "demo-cluster"

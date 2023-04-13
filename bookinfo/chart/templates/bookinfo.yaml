@@ -1,0 +1,308 @@
+# Copyright Istio Authors
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
+##################################################################################################
+# This file defines the services, service accounts, and deployments for the Bookinfo sample.
+#
+# To apply all 4 Bookinfo services, their corresponding service accounts, and deployments:
+#
+#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+#
+# Alternatively, you can deploy any resource separately:
+#
+#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml -l service=reviews # reviews Service
+#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml -l account=reviews # reviews ServiceAccount
+#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml -l app=reviews,version=v3 # reviews-v3 Deployment
+##################################################################################################
+
+##################################################################################################
+# Details service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: details
+  labels:
+    app: details
+    service: details
+spec:
+  clusterIP: 10.96.10.10
+  ports:
+  - port: 9080
+    targetPort: {{.Values.details.port}}
+    name: http
+  selector:
+    app: details
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-details
+  labels:
+    account: details
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: details
+  labels:
+    app: details
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: details
+  template:
+    metadata:
+      labels:
+        app: details
+    spec:
+      serviceAccountName: bookinfo-details
+      {{- if .Values.details.runtimeClassName }}
+      runtimeClassName: {{.Values.details.runtimeClassName}}
+      {{- end }}
+      {{- if .Values.details.image.pullSecret }}
+      imagePullSecrets:
+      - name: {{.Values.details.image.pullSecret}}
+      {{- end }}
+      containers:
+      - name: details
+        image: "{{.Values.details.image.name}}:{{.Values.details.image.tag}}"
+        imagePullPolicy: Always
+        {{- if .Values.details.env }}
+        env:
+        {{- .Values.details.env | toYaml | nindent 8 }}
+        {{- end }}
+        ports:
+        - containerPort: {{.Values.details.port}}
+        securityContext:
+          runAsUser: 1000
+---
+##################################################################################################
+# Ratings service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: ratings
+  labels:
+    app: ratings
+    service: ratings
+spec:
+  clusterIP: 10.96.10.20
+  ports:
+  - port: 9080
+    targetPort: {{.Values.ratings.port}}
+    name: http
+  selector:
+    app: ratings
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-ratings
+  labels:
+    account: ratings
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ratings
+  labels:
+    app: ratings
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ratings
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: ratings
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-ratings
+      {{- if .Values.ratings.runtimeClassName }}
+      runtimeClassName: {{.Values.ratings.runtimeClassName}}
+      {{- end }}
+      {{- if .Values.ratings.image.pullSecret }}
+      imagePullSecrets:
+      - name: {{.Values.ratings.image.pullSecret}}
+      {{- end }}
+      containers:
+      - name: ratings
+        image: "{{.Values.ratings.image.name}}:{{.Values.ratings.image.tag}}"
+        imagePullPolicy: Always
+        {{- if .Values.ratings.env }}
+        env:
+        {{- .Values.ratings.env | toYaml | nindent 8 }}
+        {{- end }}
+        ports:
+        - containerPort: {{.Values.ratings.port}}
+        securityContext:
+          runAsUser: 1000
+---
+##################################################################################################
+# Reviews service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: reviews
+  labels:
+    app: reviews
+    service: reviews
+spec:
+  clusterIP: 10.96.10.30
+  ports:
+  - port: 9080
+    targetPort: {{.Values.reviews.port}}
+    name: http
+  selector:
+    app: reviews
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-reviews
+  labels:
+    account: reviews
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reviews
+  labels:
+    app: reviews
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reviews
+  template:
+    metadata:
+      labels:
+        app: reviews
+    spec:
+      serviceAccountName: bookinfo-reviews
+      {{- if .Values.reviews.runtimeClassName }}
+      runtimeClassName: {{.Values.reviews.runtimeClassName}}
+      {{- end }}
+      {{- if .Values.reviews.image.pullSecret }}
+      imagePullSecrets:
+      - name: {{.Values.reviews.image.pullSecret}}
+      {{- end }}
+      containers:
+      - name: reviews
+        image: "{{.Values.reviews.image.name}}:{{.Values.reviews.image.tag}}"
+        imagePullPolicy: Always
+        env:
+        - name: LOG_DIR
+          value: "/tmp/logs"
+        {{- if .Values.reviews.env }}
+        {{- .Values.reviews.env | toYaml | nindent 8 }}
+        {{- end }}
+        ports:
+        - containerPort: {{.Values.reviews.port}}
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: wlp-output
+          mountPath: /opt/ibm/wlp/output
+        securityContext:
+          runAsUser: 1000
+      volumes:
+      - name: wlp-output
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+---
+##################################################################################################
+# Productpage services
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: productpage
+  labels:
+    app: productpage
+    service: productpage
+spec:
+  clusterIP: 10.96.10.40
+  ports:
+  - port: 9080
+    targetPort: {{.Values.productpage.port}}
+    name: http
+  selector:
+    app: productpage
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-productpage
+  labels:
+    account: productpage
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productpage
+  labels:
+    app: productpage
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: productpage
+      version: v1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9080"
+        prometheus.io/path: "/metrics"
+      labels:
+        app: productpage
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-productpage
+      {{- if .Values.productpage.runtimeClassName }}
+      runtimeClassName: {{.Values.productpage.runtimeClassName}}
+      {{- end }}
+      {{- if .Values.productpage.image.pullSecret }}
+      imagePullSecrets:
+      - name: {{.Values.productpage.image.pullSecret}}
+      {{- end }}
+      containers:
+      - name: productpage
+        image: "{{.Values.productpage.image.name}}:{{.Values.productpage.image.tag}}"
+        imagePullPolicy: Always
+        {{- if .Values.productpage.env }}
+        env:
+        {{- .Values.productpage.env | toYaml | nindent 8 }}
+        {{- end }}
+        ports:
+        - containerPort: {{.Values.productpage.port}}
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        securityContext:
+          runAsUser: 1000
+      volumes:
+      - name: tmp
+        emptyDir: {}
+---
