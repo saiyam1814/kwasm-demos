@@ -55,12 +55,15 @@ func (h *Handler) ProductPage(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(status)
 		return
 	}
+	fmt.Println("details: ", details)
+
 	reviews, status := h.Client.GetReviews(product.ID)
 	if status != 200 {
 		fmt.Printf("could not fetch product reviews for %d: %d\n", productID, status)
 		w.WriteHeader(status)
 		return
 	}
+	fmt.Println("details: ", reviews)
 
 	template := h.template.TemplateProductPage(product, details, reviews)
 	if _, err := w.Write([]byte(template)); err != nil {
