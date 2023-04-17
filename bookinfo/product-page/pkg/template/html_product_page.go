@@ -29,7 +29,7 @@ var productPageHTML = strings.Join(
                     text-align: center;
                 }
                 nav {
-                    background-color: #222;
+                    background-color: #950eba;
                     overflow: hidden;
                     padding: 14px 16px;
                 }
@@ -41,13 +41,15 @@ var productPageHTML = strings.Join(
                     text-decoration: none;
                 }
                 nav button {
-                    background-color: #337ab7;
+                    background-color: #fff;
+                    color: #222 !important;
                     border: none;
                     color: white;
                     float: right;
                     font-size: 14px;
                     margin-top: 8px;
                     padding: 5px 16px;
+                    border-radius: 5px;
                 }
                 main {
                     display: flex;
@@ -56,14 +58,14 @@ var productPageHTML = strings.Join(
                 }
                 h3 {
                     text-align: center;
-                    color: #337ab7;
+                    color: #950eba;
                 }
                 p {
                     text-align: justify;
                 }
                 h4 {
                     text-align: center;
-                    color: #337ab7;
+                    color: #950eba;
                 }
                 .book-details,
                 .book-reviews {
@@ -98,6 +100,7 @@ var productPageHTML = strings.Join(
                     margin-right: auto;
                     margin-left: auto;
                     width:1170px;
+                    background-color:#950eba;
                 }
                 .container-fluid {
                     padding-right: 15px;
