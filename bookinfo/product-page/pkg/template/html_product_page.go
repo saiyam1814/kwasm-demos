@@ -54,9 +54,6 @@ var productPageHTML = strings.Join(
                     justify-content: center;
                     padding: 20px;
                 }
-                .book-info {
-                    max-width: 800px;
-                }
                 h3 {
                     text-align: center;
                     color: #337ab7;
@@ -95,32 +92,102 @@ var productPageHTML = strings.Join(
                     font-size: 20px;
                     margin-right: 5px;
                 }
+                .container {
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    margin-right: auto;
+                    margin-left: auto;
+                    width:1170px;
+                }
+                .container-fluid {
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    margin-right: auto;
+                    margin-left: auto;
+                    display: block;
+                    width:100%;
+                }
+                .column1 {
+                    width: 100%;
+                    float: left;
+                    position: relative;
+                    min-height: 1px;
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    display: block;
+                    text-align: center;
+                }
+                .row {
+                    margin-right: -15px;
+                    margin-left: -15px;
+                }
+                .column2 {
+                    width: 50%;
+                    float: left;
+                    position: relative;
+                    min-height: 1px;
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    display: block;
+                    box-sizing: border-box;
+                    max-width: 45vw;
+                }
+                .column3 {
+                    box-sizing: border-box;
+                    float: left;
+                    position: relative;
+                    min-height: 1px;
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    box-sizing: border-box;
+                    display: block;
+                    max-width: 45vw;
+                }
+                .served-by {
+                    margin-left:40px;
+                }
+                dd {
+                    margin-inline-start: 0px;
+                }
+                dt {
+                    font-weight: 700;
+                    line-height: 1.42857143;
+                }
+                blockquote {
+                    font-size: 17.5px;
+                    border-left: 5px solid #eee;
+                    padding: 10px 20px;
+                }
             </style>
         </head>
         <body>
-        <header>
-            <h1>Bookinfo Product Page</h1>
-        </header>
         <nav>
-            <a href="#">BookInfo Sample</a>
-            <button type="button">Sign in</button>
+            <div class="container">
+                <a href="#">BookInfo Sample</a>
+                <button type="button">Sign in</button>
+            </div>
         </nav>
         <main>
-            <div class="book-info">`,
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="column1">`,
 		productPageSummaryReplaceTarget,
-		"",
 		`
-            <div class="book-details">
-                <h4>Book Details</h4>
+                </div>
+                <div class="row">
+                    <div class="column2">
+                        <h4>Book Details</h4>
         `,
 		productPageDetailsReplaceTarget,
 		`
-            </div>
-            <div class="book-reviews">
-                <h4>Book Reviews</h4>
+                    </div>
+                    <div class="column3">
+                        <h4>Book Reviews</h4>
         `,
 		productPageReviewsReplaceTarget,
 		`
+                    </div>
+                </div>
             </div>
         </div>
         </main>

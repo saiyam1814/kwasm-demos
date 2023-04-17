@@ -16,7 +16,7 @@ const (
 var reviewsHTML = fmt.Sprintf(
 	`
 	%s
-	<dl>
+	<dl class="served-by">
 	<dt>Reviews served by:</dt>
 	<dd><u>%s</u></dd>
 	</dl>
