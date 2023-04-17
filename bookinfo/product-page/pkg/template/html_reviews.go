@@ -10,13 +10,13 @@ const (
 	reviewsStarsReplaceTarget    = "{STARS}"
 	filledStar                   = `<span class="star" style=color:%s>&#9733;</span>`
 	emptyStar                    = `<span class="empty-star" style=color:%s>&#9734;</span>`
-	defaultStarColor             = "gold"
+	defaultStarColor             = "#950eba"
 )
 
 var reviewsHTML = fmt.Sprintf(
 	`
 	%s
-	<dl>
+	<dl class="served-by">
 	<dt>Reviews served by:</dt>
 	<dd><u>%s</u></dd>
 	</dl>

@@ -9,7 +9,7 @@ const (
 
 var summaryHTML = fmt.Sprintf(`
 	<h3>%s</h3>
-	<p>%s</p>`,
+	<p>Summary: %s</p>`,
 	titleReplaceTarget,
 	descriptionReplaceTarget,
 )

@@ -72,7 +72,7 @@ func NewServicesConfig() *ServicesConfig {
 			reviews,
 		},
 	}
-
+	fmt.Println(details)
 	return &ServicesConfig{
 		ProductPage: productPage,
 		Details:     details,
