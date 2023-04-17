@@ -57,9 +57,35 @@ var indexHTML = strings.Join(
 						width: 100%;
 						max-width: 100%;
 						margin-bottom:20px;
+						padding:5px;
 					}
 					.table-border, th, td {
 						border:1px solid #ddd;
+						box-sizing:border-box;
+					}
+					td, th {
+						display: table-cell;
+						padding:5px;
+					}
+					th:hover {
+						background-color: #ebebeb;
+					}
+					td:hover {
+						background-color: #ebebeb;
+					}
+					th {
+						text-align: left;
+					}
+					h3 {
+						font-size: 24px;
+					}
+					h1, h2, h3, h4, h5, h6 {
+						margin-top: 20px;
+						margin-bottom: 10px;
+						font-family: inherit;
+						font-weight: 500;
+						line-height: 1.1;
+						color: inherit;
 					}
 				</style>
 			<meta charset="utf-8">

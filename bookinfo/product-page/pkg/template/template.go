@@ -24,14 +24,14 @@ func (t *TemplateHandler) TemplateIndexPage(servicesDetails *config.ServicesConf
 func (t *TemplateHandler) newTable(servicesConfig *config.ServicesConfig) string {
 	return fmt.Sprintf(
 		tableHTML,
-		servicesConfig.ProductPage.Name,
-		servicesConfig.ProductPage.Endpoint,
+		servicesConfig.Details.Name,
 		servicesConfig.Details.Endpoint,
 		servicesConfig.Details.Name,
-		servicesConfig.Reviews.Endpoint,
+		servicesConfig.Details.Endpoint,
 		servicesConfig.Reviews.Name,
-		servicesConfig.Ratings.Endpoint,
+		servicesConfig.Reviews.Endpoint,
 		servicesConfig.Ratings.Name,
+		servicesConfig.Ratings.Endpoint,
 	)
 }
 
