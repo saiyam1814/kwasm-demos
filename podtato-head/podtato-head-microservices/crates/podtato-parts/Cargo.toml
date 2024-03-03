@@ -1,0 +1,20 @@
+[package]
+name = "podtato-parts"
+version = "0.1.0"
+edition = "2021"
+
+[build]
+target = "wasm32-wasi"
+
+[dependencies]
+bytes = "1"
+http-body-util = "0.1"
+hyper-util_wasi = { version = "0.1", features = ["tokio"], git = "https://github.com/0xE282B0/hyper-util",  branch = "v0.1.2-WASI" }
+hyper_wasi = { version = "1", features = ["full"], git = "https://github.com/0xE282B0/hyper", branch="v1.1.0-WASI"}
+once_cell = "1.19.0"
+opentelemetry = "0.22.0"
+opentelemetry-prometheus = "0.15.0"
+opentelemetry_sdk = "0.22.1"
+prometheus = "0.13.3"
+rust-embed = "8.3.0"
+tokio_wasi = { version = "1", features = ["rt", "macros", "net", "time", "io-util"]}
