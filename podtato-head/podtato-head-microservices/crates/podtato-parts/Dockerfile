@@ -9,8 +9,7 @@ WORKDIR /build
 
 COPY Cargo.lock .
 COPY Cargo.toml .
-COPY src/main.rs src/
-RUN cargo fetch
+RUN mkdir src && touch src/main.rs && cargo fetch
 
 COPY . .
 RUN cargo build --target wasm32-wasi --release

@@ -1,5 +1,6 @@
 {{ $componentName := "entry" }}
 {{ $repoBasename := .Values.entry.repositoryBasename }}
+{{ $runtimeClassName := .Values.entry.runtimeClassName }}
 {{ $repoTag := .Values.entry.tag }}
 {{ $env := .Values.entry.env }}
 ---
@@ -41,6 +42,9 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if $runtimeClassName}}
+      runtimeClassName: {{ $runtimeClassName }}
       {{- end }}
       terminationGracePeriodSeconds: 5
       serviceAccountName: {{ include "podtato-head.serviceAccountName" . }}

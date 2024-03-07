@@ -31,6 +31,7 @@ The installation can be customized by changing the following parameters via
 | `images.pullPolicy`             | Podtato Head Container pull policy                              | `IfNotPresent`               |
 | `images.pullSecrets`            | Podtato Head Pod pull secret                                    | `[]`                         |
 | `<service>.repositoryBasename`  | Leaf part of name of image repo for <service>                   | `entry`, `hat`, etc.         |
+| `<service>.runtimeClassName`    | RuntimeClassName used for pod                                   | `empty`                      |
 | `<service>.tag`                 | Tag of image repo for <service>                                 | `0.1.0`                      |
 | `<service>.serviceType`         | Service type for <service>                                      | `LoadBalancer` for main      |
 | `<service>.servicePort`         | Service port for <service>                                      | `9000`-`9005`                |

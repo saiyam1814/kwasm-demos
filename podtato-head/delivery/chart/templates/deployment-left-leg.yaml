@@ -1,5 +1,6 @@
 {{ $componentName := "left-leg" }}
 {{ $repoBasename := .Values.leftLeg.repositoryBasename }}
+{{ $runtimeClassName := .Values.entry.runtimeClassName }}
 {{ $repoTag := .Values.leftLeg.tag }}
 {{ $env := .Values.leftLeg.env }}
 ---
@@ -41,6 +42,9 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if $runtimeClassName}}
+      runtimeClassName: {{ $runtimeClassName }}
       {{- end }}
       terminationGracePeriodSeconds: 5
       serviceAccountName: {{ include "podtato-head.serviceAccountName" . }}

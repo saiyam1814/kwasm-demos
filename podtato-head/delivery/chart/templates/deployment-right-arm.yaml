@@ -1,5 +1,6 @@
 {{ $componentName := "right-arm" }}
 {{ $repoBasename := .Values.rightArm.repositoryBasename }}
+{{ $runtimeClassName := .Values.entry.runtimeClassName }}
 {{ $repoTag := .Values.rightArm.tag }}
 {{ $env := .Values.rightArm.env }}
 ---
@@ -41,6 +42,9 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if $runtimeClassName}}
+      runtimeClassName: {{ $runtimeClassName }}
       {{- end }}
       terminationGracePeriodSeconds: 5
       serviceAccountName: {{ include "podtato-head.serviceAccountName" . }}
