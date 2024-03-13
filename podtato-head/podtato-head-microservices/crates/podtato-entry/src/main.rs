@@ -31,8 +31,10 @@ async fn serve_req(
             Some(&_) => todo!(),
             None => todo!(),
         };
-        let res = reqwest::get(url).await.unwrap();
-        let content_data = res.text().await.unwrap();
+        let content_data = match fetch_data(&url).await {
+            Ok(data) => data,
+            Err(_) => String::new()
+        };
         let mut response = Response::new(Full::new(Bytes::from(content_data)));
         if url.ends_with(".svg") {
             response
@@ -45,7 +47,6 @@ async fn serve_req(
         let content = Assets::get(&path);
         return match content {
             Some(content) => {
-                println!("FOUND: {}", path);
                 let content_data = content.data.to_vec();
                 let mut response = Response::new(Full::new(Bytes::from(content_data)));
                 if path.ends_with(".svg") {
@@ -69,6 +70,10 @@ async fn serve_req(
     } else {
         return Ok(Response::new(Full::new(Bytes::from("Hello World!"))));
     }
+}
+
+async fn fetch_data(url: &str) ->  Result<String, reqwest::Error>  {
+   Ok(reqwest::get(url).await?.text().await?)
 }
 
 #[tokio::main(flavor = "current_thread")]
